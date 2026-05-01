@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro quase completo — Habitus 360</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0f1a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .logo {
+      margin-bottom: 40px;
+    }
+    .logo img { height: 36px; }
+
+    .card {
+      background: #111827;
+      border: 1px solid rgba(232,128,58,0.3);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .check-icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(232,128,58,0.15);
+      border: 2px solid #E8803A;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+    }
+    .check-icon svg { width: 36px; height: 36px; }
+
+    .step-badge {
+      display: inline-block;
+      background: rgba(232,128,58,0.15);
+      border: 1px solid #E8803A;
+      color: #E8803A;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    h1 em {
+      color: #E8803A;
+      font-style: normal;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #a0aec0;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 32px 0;
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E8803A;
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: #e2e8f0;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .price-box {
+      background: rgba(232,128,58,0.08);
+      border: 1px solid rgba(232,128,58,0.25);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .price-box .label { font-size: 12px; color: #a0aec0; margin-bottom: 6px; }
+    .price-box .price {
+      font-size: 36px;
+      font-weight: 900;
+      color: #E8803A;
+      line-height: 1;
+    }
+    .price-box .price span {
+      font-size: 16px;
+      font-weight: 600;
+      color: #a0aec0;
+      vertical-align: middle;
+    }
+    .price-box .desc { font-size: 12px; color: #718096; margin-top: 6px; }
+
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .benefit-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .benefit-text { display: flex; flex-direction: column; gap: 2px; }
+    .benefit-text strong { font-size: 14px; font-weight: 700; color: #fff; }
+    .benefit-text span { font-size: 13px; color: #718096; line-height: 1.5; }
+
+    .btn-whatsapp {
+      display: block;
+      width: 100%;
+      background: #25D366;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 18px 24px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+    .note {
+      font-size: 12px;
+      color: #4a5568;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <img src="img/logo.svg" alt="Habitus 360" />
+  </div>
+
+  <div class="card">
+
+    <div class="check-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#E8803A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <div class="step-badge">Passo 2 de 2</div>
+
+    <h1>Seu cadastro está<br><em>quase completo!</em></h1>
+
+    <p class="subtitle">
+      Você entrou na lista de espera. Agora falta só um passo:<br>
+      <strong style="color:#fff;">entre no grupo exclusivo de Fundadoras</strong> para garantir o acesso com o valor especial de lançamento.
+    </p>
+
+    <hr class="divider" />
+
+    <p class="step-label">O que você vai ter acesso</p>
+
+    <div class="benefits">
+      <div class="benefit-item">
+        <div class="benefit-icon">🏋️</div>
+        <div class="benefit-text">
+          <strong>Treinos para qualquer rotina</strong>
+          <span>Do lar à academia — métodos que encaixam na sua vida real</span>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">🩺</div>
+        <div class="benefit-text">
+          <strong>Time médico real</strong>
+          <span>Nutricionista, ginecologista e psiquiatra integrados à sua evolução</span>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">🌙</div>
+        <div class="benefit-text">
+          <strong>Saúde hormonal e mental</strong>
+          <span>Seu corpo feminino entendido de verdade — não só a estética</span>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">⚡</div>
+        <div class="benefit-text">
+          <strong>Acesso Fundadora exclusivo</strong>
+          <span>Condição especial só para quem entrar agora — não volta após o lançamento</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="https://chat.whatsapp.com/EBVVrOZ5qP0IFOzvqrdiQm?mode=gi_t" class="btn-whatsapp" target="_blank">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.535 5.943L.057 23.571a.75.75 0 00.921.921l5.628-1.478A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.71 9.71 0 01-4.953-1.354l-.355-.211-3.682.966.983-3.594-.231-.369A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+      </svg>
+      ENTRAR NO GRUPO EXCLUSIVO →
+    </a>
+
+    <p class="note">Grupo fechado · Apenas 99 vagas · Lançamento 07.07.2026</p>
+
+  </div>
+
+</body>
+</html>

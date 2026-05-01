@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habitus 360 — Opções de Paleta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: #f5f5f5; padding: 40px 24px; }
+    h1 { text-align: center; font-size: 22px; color: #111; margin-bottom: 8px; font-weight: 800; }
+    .intro { text-align: center; color: #666; font-size: 14px; margin-bottom: 48px; }
+
+    .paleta-bloco { margin-bottom: 64px; }
+    .paleta-titulo {
+      font-size: 18px; font-weight: 800; color: #111;
+      margin-bottom: 4px;
+    }
+    .paleta-desc { font-size: 13px; color: #666; margin-bottom: 24px; line-height: 1.6; }
+
+    /* Swatches */
+    .swatches {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px;
+    }
+    .swatch {
+      flex: 1 1 120px; max-width: 160px;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .swatch-cor { height: 80px; }
+    .swatch-info { padding: 10px 12px; background: #fff; }
+    .swatch-nome { font-size: 11px; font-weight: 700; color: #333; }
+    .swatch-hex { font-size: 11px; color: #888; font-family: monospace; }
+
+    /* Preview de seção */
+    .preview { border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+    .prev-dark { padding: 48px 36px; }
+    .prev-light { padding: 48px 36px; }
+    .prev-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 10px; display: block;
+    }
+    .prev-h1 { font-size: 28px; font-weight: 900; line-height: 1.15; margin-bottom: 12px; }
+    .prev-p { font-size: 14px; line-height: 1.75; margin-bottom: 24px; opacity: 0.7; }
+    .prev-btn {
+      display: inline-block; padding: 14px 32px; border-radius: 100px;
+      font-size: 13px; font-weight: 700; text-decoration: none;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .prev-cards { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+    .prev-card {
+      flex: 1 1 140px; border-radius: 14px; padding: 20px 16px;
+    }
+    .prev-card-icon { font-size: 24px; margin-bottom: 8px; }
+    .prev-card-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .prev-card-text { font-size: 11px; opacity: 0.6; line-height: 1.5; }
+
+    hr { border: none; border-top: 2px dashed #ddd; margin: 48px 0; }
+
+    /* =============================================
+       OPÇÃO 1 — NAVY + LARANJA
+    ============================================= */
+    .op1-dark  { background: #0C1B2E; }
+    .op1-light { background: #F0F8FF; }
+    .op1-eyebrow { color: #F07830; }
+    .op1-h1-dark { color: #E8F4FF; }
+    .op1-h1-light { color: #0C1B2E; }
+    .op1-p-dark { color: #9ABDD8; }
+    .op1-p-light { color: #3A5A70; }
+    .op1-btn { background: #F07830; color: #fff; }
+    .op1-card { background: rgba(42,176,224,0.1); border: 1px solid rgba(42,176,224,0.2); }
+    .op1-card-title { color: #E8F4FF; }
+    .op1-card-text { color: #9ABDD8; }
+
+    /* =============================================
+       OPÇÃO 2 — LARANJA PASTEL + PRETO
+    ============================================= */
+    .op2-dark  { background: #111111; }
+    .op2-light { background: #FDF4EC; }
+    .op2-eyebrow { color: #E8803A; }
+    .op2-h1-dark { color: #FDF4EC; }
+    .op2-h1-light { color: #111111; }
+    .op2-p-dark { color: rgba(253,244,236,0.6); }
+    .op2-p-light { color: #6B4C30; }
+    .op2-btn { background: #E8803A; color: #fff; }
+    .op2-btn-dark { background: #E8803A; color: #fff; }
+    .op2-card { background: rgba(232,128,58,0.08); border: 1px solid rgba(232,128,58,0.18); }
+    .op2-card-title { color: #FDF4EC; }
+    .op2-card-text { color: rgba(253,244,236,0.55); }
+    .op2-card-light { background: #fff; border: 1px solid #F0D9C5; }
+    .op2-card-title-light { color: #111; }
+
+    /* =============================================
+       OPÇÃO 3 — AZUL CLARO + CREME
+    ============================================= */
+    .op3-dark  { background: #111827; }
+    .op3-light { background: #F7F9FC; }
+    .op3-eyebrow { color: #2AB0E0; }
+    .op3-h1-dark { color: #F0F9FF; }
+    .op3-h1-light { color: #111827; }
+    .op3-p-dark { color: rgba(190,230,250,0.65); }
+    .op3-p-light { color: #3A5060; }
+    .op3-btn { background: #2AB0E0; color: #fff; }
+    .op3-card { background: rgba(42,176,224,0.08); border: 1px solid rgba(42,176,224,0.15); }
+    .op3-card-title { color: #F0F9FF; }
+    .op3-card-text { color: rgba(190,230,250,0.6); }
+  </style>
+</head>
+<body>
+
+  <h1>Habitus 360 — Escolha sua Paleta</h1>
+  <p class="intro">3 opções baseadas nas cores reais da sua logo (azul #2AB0E0 + laranja #F07830). Escolha a que mais representa a plataforma que você quer criar.</p>
+
+  <!-- ==========================================
+       OPÇÃO 1 — NAVY + LARANJA
+  =========================================== -->
+  <div class="paleta-bloco">
+    <div class="paleta-titulo">Opção 1 — Navy + Laranja</div>
+    <div class="paleta-desc">Fundo escuro em navy (derivado do azul da logo). Laranja como acento vibrante. Sensação: premium, tech, saúde séria. Parece com plataformas de saúde de alto ticket — Noom, Calibrate, Strava.</div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#0C1B2E"></div>
+        <div class="swatch-info"><div class="swatch-nome">Navy (fundo escuro)</div><div class="swatch-hex">#0C1B2E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#F0F8FF"></div>
+        <div class="swatch-info"><div class="swatch-nome">Azul claro (fundo claro)</div><div class="swatch-hex">#F0F8FF</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#2AB0E0"></div>
+        <div class="swatch-info"><div class="swatch-nome">Azul logo</div><div class="swatch-hex">#2AB0E0</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#F07830"></div>
+        <div class="swatch-info"><div class="swatch-nome">Laranja logo (acento)</div><div class="swatch-hex">#F07830</div></div>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="prev-dark op1-dark">
+        <span class="prev-eyebrow op1-eyebrow">A plataforma feminina</span>
+        <div class="prev-h1 op1-h1-dark">Feita para o corpo<br>da mulher de verdade</div>
+        <div class="prev-p op1-p-dark">Com time médico integrado — nutricionista, ginecologista e psiquiatra — direto na sua rotina.</div>
+        <a class="prev-btn op1-btn">QUERO SER FUNDADORA →</a>
+        <div class="prev-cards">
+          <div class="prev-card op1-card">
+            <div class="prev-card-icon">🏋️</div>
+            <div class="prev-card-title op1-card-title">Treinos</div>
+            <div class="prev-card-text op1-card-text">Protocolo adaptado ao ciclo feminino</div>
+          </div>
+          <div class="prev-card op1-card">
+            <div class="prev-card-icon">🥗</div>
+            <div class="prev-card-title op1-card-title">Nutrição</div>
+            <div class="prev-card-text op1-card-text">Plano com nutricionista especializada</div>
+          </div>
+          <div class="prev-card op1-card">
+            <div class="prev-card-icon">🧠</div>
+            <div class="prev-card-title op1-card-title">Saúde Mental</div>
+            <div class="prev-card-text op1-card-text">Acompanhamento com psiquiatra</div>
+          </div>
+        </div>
+      </div>
+      <div class="prev-light op1-light">
+        <span class="prev-eyebrow op1-eyebrow">Por que funciona</span>
+        <div class="prev-h1 op1-h1-light">O Método Habitus 360</div>
+        <div class="prev-p op1-p-light">Não é mais uma dieta. É um protocolo completo construído com base na fisiologia feminina.</div>
+        <a class="prev-btn op1-btn">VER A OFERTA →</a>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ==========================================
+       OPÇÃO 2 — LARANJA PASTEL + PRETO
+  =========================================== -->
+  <div class="paleta-bloco">
+    <div class="paleta-titulo">Opção 2 — Laranja Pastel + Preto</div>
+    <div class="paleta-desc">Mantém o preto que você já tem, troca o rosa pelo laranja da logo (mais suave, pastel). Fundo claro em creme aquecido. Sensação: energia, movimento, feminino vibrante. Mais próximo do estilo Boom/Academia Foguete — dinâmico, sem parecer "de menininha".</div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#111111"></div>
+        <div class="swatch-info"><div class="swatch-nome">Preto (fundo escuro)</div><div class="swatch-hex">#111111</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#FDF4EC"></div>
+        <div class="swatch-info"><div class="swatch-nome">Creme laranja (fundo claro)</div><div class="swatch-hex">#FDF4EC</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#E8803A"></div>
+        <div class="swatch-info"><div class="swatch-nome">Laranja pastel (acento)</div><div class="swatch-hex">#E8803A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#2AB0E0"></div>
+        <div class="swatch-info"><div class="swatch-nome">Azul logo (acento 2º)</div><div class="swatch-hex">#2AB0E0</div></div>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="prev-dark op2-dark">
+        <span class="prev-eyebrow op2-eyebrow">A plataforma feminina</span>
+        <div class="prev-h1 op2-h1-dark">Feita para o corpo<br>da mulher de verdade</div>
+        <div class="prev-p op2-p-dark">Com time médico integrado — nutricionista, ginecologista e psiquiatra — direto na sua rotina.</div>
+        <a class="prev-btn op2-btn">QUERO SER FUNDADORA →</a>
+        <div class="prev-cards">
+          <div class="prev-card op2-card">
+            <div class="prev-card-icon">🏋️</div>
+            <div class="prev-card-title op2-card-title">Treinos</div>
+            <div class="prev-card-text op2-card-text">Protocolo adaptado ao ciclo feminino</div>
+          </div>
+          <div class="prev-card op2-card">
+            <div class="prev-card-icon">🥗</div>
+            <div class="prev-card-title op2-card-title">Nutrição</div>
+            <div class="prev-card-text op2-card-text">Plano com nutricionista especializada</div>
+          </div>
+          <div class="prev-card op2-card">
+            <div class="prev-card-icon">🧠</div>
+            <div class="prev-card-title op2-card-title">Saúde Mental</div>
+            <div class="prev-card-text op2-card-text">Acompanhamento com psiquiatra</div>
+          </div>
+        </div>
+      </div>
+      <div class="prev-light op2-light">
+        <span class="prev-eyebrow op2-eyebrow">Por que funciona</span>
+        <div class="prev-h1 op2-h1-light">O Método Habitus 360</div>
+        <div class="prev-p op2-p-light">Não é mais uma dieta. É um protocolo completo construído com base na fisiologia feminina.</div>
+        <a class="prev-btn op2-btn">VER A OFERTA →</a>
+        <div class="prev-cards">
+          <div class="prev-card op2-card-light">
+            <div class="prev-card-icon">🏋️</div>
+            <div class="prev-card-title op2-card-title-light">Treinos</div>
+            <div class="prev-card-text" style="color:#8B6040">Protocolo adaptado ao ciclo feminino</div>
+          </div>
+          <div class="prev-card op2-card-light">
+            <div class="prev-card-icon">🥗</div>
+            <div class="prev-card-title op2-card-title-light">Nutrição</div>
+            <div class="prev-card-text" style="color:#8B6040">Plano com nutricionista especializada</div>
+          </div>
+          <div class="prev-card op2-card-light">
+            <div class="prev-card-icon">🧠</div>
+            <div class="prev-card-title op2-card-title-light">Saúde Mental</div>
+            <div class="prev-card-text" style="color:#8B6040">Acompanhamento com psiquiatra</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ==========================================
+       OPÇÃO 3 — AZUL CLARO + CREME
+  =========================================== -->
+  <div class="paleta-bloco">
+    <div class="paleta-titulo">Opção 3 — Azul Claro + Creme Frio</div>
+    <div class="paleta-desc">Fundo escuro em cinza-azulado (não preto puro). Azul da logo como acento principal. Laranja apenas em botões CTA. Sensação: clean, premium, confiança médica. Próximo de marcas de saúde tech como Whoop, Eight Sleep.</div>
+
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#111827"></div>
+        <div class="swatch-info"><div class="swatch-nome">Grafite escuro</div><div class="swatch-hex">#111827</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#F7F9FC"></div>
+        <div class="swatch-info"><div class="swatch-nome">Branco frio (fundo claro)</div><div class="swatch-hex">#F7F9FC</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#2AB0E0"></div>
+        <div class="swatch-info"><div class="swatch-nome">Azul logo (acento)</div><div class="swatch-hex">#2AB0E0</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#F07830"></div>
+        <div class="swatch-info"><div class="swatch-nome">Laranja logo (CTA)</div><div class="swatch-hex">#F07830</div></div>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="prev-dark op3-dark">
+        <span class="prev-eyebrow op3-eyebrow">A plataforma feminina</span>
+        <div class="prev-h1 op3-h1-dark">Feita para o corpo<br>da mulher de verdade</div>
+        <div class="prev-p op3-p-dark">Com time médico integrado — nutricionista, ginecologista e psiquiatra — direto na sua rotina.</div>
+        <a class="prev-btn" style="background:#F07830;color:#fff">QUERO SER FUNDADORA →</a>
+        <div class="prev-cards">
+          <div class="prev-card op3-card">
+            <div class="prev-card-icon">🏋️</div>
+            <div class="prev-card-title op3-card-title">Treinos</div>
+            <div class="prev-card-text op3-card-text">Protocolo adaptado ao ciclo feminino</div>
+          </div>
+          <div class="prev-card op3-card">
+            <div class="prev-card-icon">🥗</div>
+            <div class="prev-card-title op3-card-title">Nutrição</div>
+            <div class="prev-card-text op3-card-text">Plano com nutricionista especializada</div>
+          </div>
+          <div class="prev-card op3-card">
+            <div class="prev-card-icon">🧠</div>
+            <div class="prev-card-title op3-card-title">Saúde Mental</div>
+            <div class="prev-card-text op3-card-text">Acompanhamento com psiquiatra</div>
+          </div>
+        </div>
+      </div>
+      <div class="prev-light op3-light">
+        <span class="prev-eyebrow op3-eyebrow">Por que funciona</span>
+        <div class="prev-h1 op3-h1-light">O Método Habitus 360</div>
+        <div class="prev-p op3-p-light">Não é mais uma dieta. É um protocolo completo construído com base na fisiologia feminina.</div>
+        <a class="prev-btn" style="background:#F07830;color:#fff">VER A OFERTA →</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

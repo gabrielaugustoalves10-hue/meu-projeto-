@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pós-Treino — Habitus 360</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --laranja: #E8803A; --laranja-hover: #d4722f;
+      --navy: #07101e; --card: #0f1c2e; --card2: #162033;
+      --border: rgba(255,255,255,0.07); --border-orange: rgba(232,128,58,0.3);
+      --text: #e2e8f0; --muted: #6b7a8d; --muted2: #4a5568;
+      --verde: #48bb78;
+    }
+    body { font-family: 'Poppins', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 32px 20px 80px; }
+    .logo { margin-bottom: 28px; } .logo img { height: 28px; }
+    .logo-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px; }
+    .logo-text span { color: var(--laranja); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 32px; max-width: 560px; width: 100%; }
+    .screen { display: none; } .screen.active { display: block; }
+    .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--laranja); margin-bottom: 12px; }
+    h2 { font-size: clamp(18px, 3.5vw, 22px); font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 6px; }
+    h2 em { color: var(--laranja); font-style: normal; }
+    .hint { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+    /* AUTH */
+    .auth-icon { width: 56px; height: 56px; background: rgba(232,128,58,0.1); border: 1px solid var(--border-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 0 20px; }
+    .auth-icon svg { width: 26px; height: 26px; stroke: var(--laranja); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .name-input, .email-input { width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: #fff; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
+    .name-input::placeholder, .email-input::placeholder { color: var(--muted2); font-weight: 400; font-size: 13px; }
+    .name-input:focus, .email-input:focus { border-color: var(--laranja); }
+
+    /* BOTOES */
+    .btn-next { display: block; width: 100%; margin-top: 22px; background: var(--laranja); color: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 16px; border-radius: 10px; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+    .btn-next:hover { background: var(--laranja-hover); transform: translateY(-1px); }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-secondary { display: block; width: 100%; margin-top: 10px; background: transparent; color: var(--muted); font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; padding: 10px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+    .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+    /* OPCOES DE GRADE */
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .opt-card { background: rgba(255,255,255,0.02); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; text-align: center; }
+    .opt-card:hover { border-color: var(--border-orange); background: rgba(232,128,58,0.03); }
+    .opt-card.selected { border-color: var(--laranja); background: rgba(232,128,58,0.08); }
+    .opt-card .oc-icon { font-size: 22px; margin-bottom: 6px; }
+    .opt-card .oc-label { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .opt-card .oc-met { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    /* DURACAO */
+    .dur-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+    .dur-item { background: rgba(255,255,255,0.02); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 8px; cursor: pointer; transition: border-color 0.2s, background 0.2s; text-align: center; font-size: 13px; font-weight: 700; color: var(--text); }
+    .dur-item:hover { border-color: var(--border-orange); }
+    .dur-item.selected { border-color: var(--laranja); background: rgba(232,128,58,0.08); }
+    .dur-item span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+
+    /* ESCALA */
+    .scale-wrap { display: flex; gap: 8px; margin-bottom: 8px; }
+    .scale-item { flex: 1; background: rgba(255,255,255,0.03); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 4px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .scale-item:hover { border-color: var(--border-orange); }
+    .scale-item.selected { border-color: var(--laranja); background: rgba(232,128,58,0.08); }
+    .scale-item .s-num { font-size: 20px; font-weight: 900; color: #fff; display: block; margin-bottom: 3px; }
+    .scale-item .s-emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+    .scale-item .s-label { font-size: 9px; color: var(--muted); line-height: 1.3; display: block; }
+
+    /* CAMPO TEXTO */
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .field textarea { width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 16px; font-family: 'Poppins', sans-serif; font-size: 14px; color: #fff; outline: none; transition: border-color 0.2s; resize: none; height: 80px; }
+    .field textarea::placeholder { color: var(--muted2); font-weight: 400; font-size: 13px; }
+    .field textarea:focus { border-color: var(--laranja); }
+
+    /* FOTO */
+    .photo-upload-area { border: 2px dashed var(--muted2); border-radius: 16px; padding: 28px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; margin-bottom: 12px; position: relative; overflow: hidden; }
+    .photo-upload-area:hover { border-color: var(--laranja); background: rgba(232,128,58,0.03); }
+    .photo-upload-area.has-photo { border-color: var(--laranja); border-style: solid; padding: 0; }
+    .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .photo-preview { width: 100%; max-height: 260px; object-fit: cover; border-radius: 14px; display: none; }
+    .photo-preview.visible { display: block; }
+    .photo-placeholder strong { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .photo-placeholder span { font-size: 12px; color: var(--muted); }
+
+    /* KCAL PREVIEW */
+    .kcal-preview { background: rgba(232,128,58,0.08); border: 1px solid var(--border-orange); border-radius: 14px; padding: 20px 24px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .kcal-preview.hidden { display: none; }
+    .kp-left .kp-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--laranja); margin-bottom: 4px; }
+    .kp-left .kp-val { font-size: 36px; font-weight: 900; color: #fff; line-height: 1; }
+    .kp-left .kp-unit { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .kp-right { font-size: 11px; color: var(--muted); line-height: 1.6; max-width: 160px; text-align: right; }
+    .kp-fire { font-size: 32px; }
+
+    /* RESULTADO */
+    .result-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(72,187,120,0.1); border: 1px solid rgba(72,187,120,0.3); border-radius: 100px; padding: 6px 16px; margin-bottom: 18px; }
+    .result-badge span { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--verde); }
+    .res-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .res-stat { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+    .rs-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .rs-value { font-size: 18px; font-weight: 900; color: #fff; }
+    .rs-value.orange { color: var(--laranja); }
+    .rs-unit { font-size: 10px; color: var(--muted); }
+
+    .nota-block { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .nb-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--laranja); margin-bottom: 6px; }
+    .nb-text { font-size: 13px; color: var(--text); line-height: 1.7; font-style: italic; }
+
+    /* CARD COMPARTILHAR */
+    .share-section { margin-top: 20px; }
+    .share-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .canvas-wrap { border-radius: 16px; overflow: hidden; margin-bottom: 12px; background: #07101e; }
+    canvas { display: block; width: 100%; height: auto; border-radius: 16px; }
+    .btn-download { display: block; width: 100%; background: var(--card2); color: var(--text); font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; padding: 14px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: border-color 0.2s; margin-bottom: 8px; }
+    .btn-download:hover { border-color: var(--laranja); color: #fff; }
+    .share-note { font-size: 11px; color: var(--muted2); text-align: center; line-height: 1.6; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 20px 0; }
+    .spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--laranja); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg { background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.3); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #fc8181; margin-top: 12px; display: none; }
+    .error-msg.visible { display: block; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+    @media (max-width: 480px) { .card { padding: 24px 18px; } .options-grid { grid-template-columns: 1fr 1fr; } .scale-wrap { flex-wrap: wrap; } .res-stats { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="logo-text">HABITUS <span>360</span></div>
+</div>
+
+<div class="card">
+
+  <!-- LOADING -->
+  <div class="screen active" id="screen-loading">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p style="font-size:13px;color:var(--muted)">Verificando seu acesso...</p>
+    </div>
+  </div>
+
+  <!-- AUTH -->
+  <div class="screen" id="screen-auth">
+    <div class="auth-icon">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="eyebrow">Pós-Treino</div>
+    <h2>Registre seu <em>treino de hoje.</em></h2>
+    <p class="hint">Digite seu email da conta Habitus 360. Vamos enviar um link de acesso para o seu email — sem senha.</p>
+    <input type="text" class="name-input" id="auth-nome" placeholder="Seu primeiro nome" autocomplete="off" />
+    <input type="email" class="email-input" id="auth-email" placeholder="Seu email da plataforma" autocomplete="email" />
+    <button class="btn-next" id="btn-magic" onclick="sendMagicLink()">Enviar link de acesso</button>
+    <div class="error-msg" id="auth-error"></div>
+  </div>
+
+  <!-- AGUARDANDO EMAIL -->
+  <div class="screen" id="screen-wait">
+    <div class="auth-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <div class="eyebrow">Verifique seu email</div>
+    <h2>Link enviado para <em id="wait-email"></em></h2>
+    <p class="hint">Clique no link que chegou no seu email para acessar. Valido por 1 hora. Verifique tambem a caixa de spam.</p>
+    <button class="btn-secondary" onclick="showScreen('screen-auth')">Usar outro email</button>
+  </div>
+
+  <!-- STEP 1 — TIPO DE TREINO -->
+  <div class="screen" id="step-1">
+    <div class="eyebrow">Passo 1 de 3</div>
+    <h2>Que treino voce <em>fez hoje?</em></h2>
+    <p class="hint">Escolha o tipo e a duracao — vamos calcular sua estimativa de calorias.</p>
+
+    <div class="section-label">Tipo de treino</div>
+    <div class="options-grid" id="tipos">
+      <div class="opt-card" onclick="selectTipo(this, 'casa', 5)" data-met="5">
+        <div class="oc-icon">🏠</div>
+        <div class="oc-label">Treino em Casa</div>
+      </div>
+      <div class="opt-card" onclick="selectTipo(this, 'academia', 5)" data-met="5">
+        <div class="oc-icon">🏋️</div>
+        <div class="oc-label">Academia</div>
+      </div>
+      <div class="opt-card" onclick="selectTipo(this, 'hiit', 9)" data-met="9">
+        <div class="oc-icon">🔥</div>
+        <div class="oc-label">HIIT ou Cardio</div>
+      </div>
+      <div class="opt-card" onclick="selectTipo(this, 'yoga', 3)" data-met="3">
+        <div class="oc-icon">🧘</div>
+        <div class="oc-label">Yoga e Meditacao</div>
+      </div>
+      <div class="opt-card" onclick="selectTipo(this, 'mobilidade', 2.5)" data-met="2.5">
+        <div class="oc-icon">🌿</div>
+        <div class="oc-label">Mobilidade e Pilates</div>
+      </div>
+      <div class="opt-card" onclick="selectTipo(this, 'lpf', 6)" data-met="6">
+        <div class="oc-icon">⚡</div>
+        <div class="oc-label">LPF</div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section-label">Duracao</div>
+    <div class="dur-grid" id="duracoes">
+      <div class="dur-item" onclick="selectDuracao(this, 10)">10<span>min</span></div>
+      <div class="dur-item" onclick="selectDuracao(this, 20)">20<span>min</span></div>
+      <div class="dur-item" onclick="selectDuracao(this, 30)">30<span>min</span></div>
+      <div class="dur-item" onclick="selectDuracao(this, 40)">40<span>min</span></div>
+    </div>
+
+    <div class="kcal-preview hidden" id="kcal-preview">
+      <div class="kp-left">
+        <div class="kp-label">Estimativa de calorias</div>
+        <div class="kp-val" id="kcal-val">—</div>
+        <div class="kp-unit">kcal queimadas</div>
+      </div>
+      <div>
+        <div class="kp-fire">🔥</div>
+      </div>
+      <div class="kp-right">Estimativa baseada no seu peso e tipo de treino. Referencia — nao uma medicao exata.</div>
+    </div>
+
+    <button class="btn-next" id="btn-step1" onclick="goStep2()" disabled>Continuar</button>
+  </div>
+
+  <!-- STEP 2 — COMO VOCÊ SE SENTIU -->
+  <div class="screen" id="step-2">
+    <div class="eyebrow">Passo 2 de 3</div>
+    <h2>Como voce se <em>sentiu?</em></h2>
+    <p class="hint">Seja honesta. Esse registro e so seu — e vai te ajudar a entender seu corpo ao longo do tempo.</p>
+
+    <div class="section-label">Intensidade que voce sentiu</div>
+    <div class="scale-wrap" id="escala-sentiu">
+      <div class="scale-item" onclick="selectEscala(this, 1)">
+        <span class="s-emoji">😴</span>
+        <span class="s-num">1</span>
+        <span class="s-label">Muito leve</span>
+      </div>
+      <div class="scale-item" onclick="selectEscala(this, 2)">
+        <span class="s-emoji">🙂</span>
+        <span class="s-num">2</span>
+        <span class="s-label">Leve</span>
+      </div>
+      <div class="scale-item" onclick="selectEscala(this, 3)">
+        <span class="s-emoji">💪</span>
+        <span class="s-num">3</span>
+        <span class="s-label">Moderado</span>
+      </div>
+      <div class="scale-item" onclick="selectEscala(this, 4)">
+        <span class="s-emoji">🔥</span>
+        <span class="s-num">4</span>
+        <span class="s-label">Intenso</span>
+      </div>
+      <div class="scale-item" onclick="selectEscala(this, 5)">
+        <span class="s-emoji">🤯</span>
+        <span class="s-num">5</span>
+        <span class="s-label">Maximo</span>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="field">
+      <label>O que voce quer registrar? (opcional)</label>
+      <textarea id="f-nota" placeholder="Como voce se sentiu, o que foi dificil, o que surpreendeu voce hoje..."></textarea>
+    </div>
+
+    <button class="btn-next" id="btn-step2" onclick="goStep3()" disabled>Continuar</button>
+    <button class="btn-secondary" onclick="goStep3()">Pular e finalizar</button>
+  </div>
+
+  <!-- STEP 3 — FOTO E CARD -->
+  <div class="screen" id="step-3">
+    <div class="eyebrow">Passo 3 de 3</div>
+    <h2>Registre esse <em>momento.</em></h2>
+    <p class="hint">Adicione uma foto opcional — depois gere seu card para compartilhar com a comunidade.</p>
+
+    <div class="photo-upload-area" id="photo-area">
+      <input type="file" accept="image/jpeg,image/png,image/webp" id="photo-input" onchange="handlePhoto(this)" capture="environment" />
+      <div class="photo-placeholder" id="photo-placeholder">
+        <div style="font-size:32px;margin-bottom:10px;">📸</div>
+        <strong>Adicionar foto do treino</strong>
+        <span>Opcional — so voce tem acesso</span>
+      </div>
+      <img class="photo-preview" id="photo-preview" alt="Foto do treino" />
+    </div>
+
+    <button class="btn-next" id="btn-salvar" onclick="salvarRegistro()">Salvar e gerar card</button>
+    <button class="btn-secondary" onclick="salvarRegistro()">Salvar sem foto</button>
+
+    <div class="loading" id="saving-loading" style="display:none;">
+      <div class="spinner"></div>
+      <p style="font-size:13px;color:var(--muted)">Salvando seu registro...</p>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="screen" id="screen-result">
+    <div class="result-badge"><span>✓ Treino registrado</span></div>
+    <h2 id="res-title">Voce <em>foi.</em></h2>
+    <p class="hint" id="res-hint">Isso conta. Cada registro e uma prova de que voce esta construindo algo.</p>
+
+    <div class="res-stats" id="res-stats"></div>
+
+    <div class="nota-block" id="res-nota-block" style="display:none;">
+      <div class="nb-label">Seu registro</div>
+      <div class="nb-text" id="res-nota"></div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="share-section">
+      <div class="share-title">Compartilhe sua conquista</div>
+      <div class="canvas-wrap">
+        <canvas id="share-canvas" width="1080" height="1920"></canvas>
+      </div>
+      <button class="btn-download" onclick="downloadCard()">⬇ Baixar card (Stories)</button>
+      <button class="btn-download" onclick="downloadCardQuadrado()">⬇ Baixar card (Feed / Comunidade)</button>
+      <p class="share-note">Baixe e compartilhe no Instagram Stories ou na comunidade da Habitus 360 no Curseduca.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://gbjwztrieolewkixdnko.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_wOQl3mAlYrPIRIYwpkWnbw_FuuIAxA1';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let currentUser = null;
+  let nomeUsuario = '';
+  let pesoUsuario = null;
+  let photoFile = null;
+
+  // Estado do registro
+  const reg = { tipo: null, met: 5, duracao: null, intensidade: null, kcal: null };
+
+  // INIT
+  window.addEventListener('load', async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      currentUser = session.user;
+      await carregarPerfil();
+      showScreen('step-1');
+    } else {
+      showScreen('screen-auth');
+    }
+  });
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      currentUser = session.user;
+      await carregarPerfil();
+      showScreen('step-1');
+    }
+  });
+
+  async function carregarPerfil() {
+    // Busca nome e peso do perfil + diário inicial
+    const { data: profile } = await sb.from('profiles').select('nome').eq('id', currentUser.id).single();
+    if (profile?.nome) nomeUsuario = profile.nome;
+
+    const { data: diario } = await sb.from('diario_entradas')
+      .select('peso')
+      .eq('user_id', currentUser.id)
+      .eq('tipo', 'dia0')
+      .single();
+    if (diario?.peso) pesoUsuario = diario.peso;
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // AUTH — Magic Link
+  async function sendMagicLink() {
+    const nome = document.getElementById('auth-nome').value.trim();
+    const email = document.getElementById('auth-email').value.trim();
+    const errEl = document.getElementById('auth-error');
+    const btn = document.getElementById('btn-magic');
+
+    if (!nome || !email) { showError(errEl, 'Preencha seu nome e email.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError(errEl, 'Digite um email valido.'); return; }
+
+    nomeUsuario = nome;
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const { error } = await sb.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: 'https://habitus360.com.br/postreino.html',
+        data: { nome }
+      }
+    });
+
+    if (error) {
+      showError(errEl, 'Erro: ' + (error.message || JSON.stringify(error)));
+      btn.disabled = false;
+      btn.textContent = 'Enviar link de acesso';
+    } else {
+      document.getElementById('wait-email').textContent = email;
+      showScreen('screen-wait');
+    }
+  }
+
+  function showError(el, msg) { el.textContent = msg; el.classList.add('visible'); }
+
+  // STEP 1
+  function selectTipo(el, tipo, met) {
+    document.querySelectorAll('#tipos .opt-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    reg.tipo = tipo;
+    reg.met = met;
+    atualizarKcal();
+    verificarStep1();
+  }
+
+  function selectDuracao(el, min) {
+    document.querySelectorAll('#duracoes .dur-item').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    reg.duracao = min;
+    atualizarKcal();
+    verificarStep1();
+  }
+
+  function atualizarKcal() {
+    if (!reg.tipo || !reg.duracao) return;
+    const peso = pesoUsuario || 65; // peso medio se nao tiver
+    const intensMult = reg.intensidade ? (reg.intensidade <= 2 ? 0.75 : reg.intensidade >= 4 ? 1.2 : 1.0) : 1.0;
+    const kcal = Math.round(reg.met * peso * (reg.duracao / 60) * intensMult);
+    reg.kcal = kcal;
+    document.getElementById('kcal-val').textContent = kcal;
+    document.getElementById('kcal-preview').classList.remove('hidden');
+  }
+
+  function verificarStep1() {
+    document.getElementById('btn-step1').disabled = !(reg.tipo && reg.duracao);
+  }
+
+  function goStep2() { showScreen('step-2'); }
+
+  // STEP 2
+  function selectEscala(el, val) {
+    document.querySelectorAll('#escala-sentiu .scale-item').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    reg.intensidade = val;
+    atualizarKcal(); // recalcula com intensidade
+    document.getElementById('btn-step2').disabled = false;
+  }
+
+  function goStep3() { showScreen('step-3'); }
+
+  // FOTO
+  function handlePhoto(input) {
+    const file = input.files[0];
+    if (!file) return;
+    photoFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const prev = document.getElementById('photo-preview');
+      prev.src = e.target.result;
+      prev.classList.add('visible');
+      document.getElementById('photo-placeholder').style.display = 'none';
+      document.getElementById('photo-area').classList.add('has-photo');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // SALVAR
+  async function salvarRegistro() {
+    document.getElementById('btn-salvar').style.display = 'none';
+    document.querySelector('#step-3 .btn-secondary').style.display = 'none';
+    document.getElementById('saving-loading').style.display = 'block';
+
+    let foto_url = null;
+
+    if (photoFile && currentUser) {
+      const ext = photoFile.name.split('.').pop();
+      const path = `${currentUser.id}/postreino_${Date.now()}.${ext}`;
+      const { error: upErr } = await sb.storage.from('Fotos-diario').upload(path, photoFile);
+      if (!upErr) foto_url = path;
+    }
+
+    const nota = document.getElementById('f-nota').value.trim();
+
+    const entrada = {
+      user_id: currentUser.id,
+      tipo_treino: reg.tipo,
+      duracao_min: reg.duracao,
+      intensidade: reg.intensidade,
+      kcal_estimada: reg.kcal,
+      nota: nota || null,
+      foto_url,
+      data_treino: new Date().toISOString()
+    };
+
+    await sb.from('postreino_registros').insert([entrada]);
+
+    // Pontos
+    const pontos = 10 + (foto_url ? 5 : 0) + (nota ? 3 : 0);
+    const { data: prof } = await sb.from('profiles').select('pontos').eq('id', currentUser.id).single();
+    const totalPontos = (prof?.pontos || 0) + pontos;
+    await sb.from('profiles').update({ pontos: totalPontos }).eq('id', currentUser.id);
+    await sb.from('gamificacao_eventos').insert([{ user_id: currentUser.id, evento: 'postreino', pontos }]);
+
+    mostrarResultado(entrada, pontos);
+  }
+
+  function mostrarResultado(d, pontos) {
+    showScreen('screen-result');
+
+    const nome = nomeUsuario || 'Voce';
+    document.getElementById('res-title').innerHTML = nome + ', voce <em>foi.</em>';
+
+    const tipoLabels = { casa:'Treino em Casa', academia:'Academia', hiit:'HIIT ou Cardio', yoga:'Yoga e Meditacao', mobilidade:'Mobilidade e Pilates', lpf:'LPF' };
+    const emojiEscala = ['', '😴', '🙂', '💪', '🔥', '🤯'];
+
+    const stats = [
+      { label: 'Treino', value: tipoLabels[d.tipo_treino] || 'Treino', unit: '', orange: false },
+      { label: 'Duracao', value: d.duracao_min, unit: 'min', orange: false },
+      d.kcal_estimada ? { label: 'Kcal est.', value: d.kcal_estimada, unit: 'kcal', orange: true } : null,
+      d.intensidade ? { label: 'Intensidade', value: emojiEscala[d.intensidade] + ' ' + d.intensidade + '/5', unit: '', orange: false } : null,
+      { label: 'Pontos', value: '+' + pontos, unit: 'pts', orange: true },
+    ].filter(Boolean);
+
+    document.getElementById('res-stats').innerHTML = stats.map(s =>
+      `<div class="res-stat"><div class="rs-label">${s.label}</div><div class="rs-value${s.orange?' orange':''}">${s.value}</div>${s.unit?`<div class="rs-unit">${s.unit}</div>`:''}</div>`
+    ).join('');
+
+    if (d.nota) {
+      document.getElementById('res-nota-block').style.display = 'block';
+      document.getElementById('res-nota').textContent = d.nota;
+    }
+
+    // Gerar card Stories
+    gerarCard(d);
+  }
+
+  // CARD STORIES (1080x1920)
+  function gerarCard(d) {
+    const canvas = document.getElementById('share-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 1080;
+    canvas.height = 1920;
+
+    const tipoLabels = { casa:'Treino em Casa', academia:'Academia', hiit:'HIIT ou Cardio', yoga:'Yoga e Meditacao', mobilidade:'Mobilidade e Pilates', lpf:'LPF' };
+    const emojiEscala = ['', '😴', '🙂', '💪', '🔥', '🤯'];
+    const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+    // Fundo
+    const grad = ctx.createLinearGradient(0, 0, 0, 1920);
+    grad.addColorStop(0, '#07101e');
+    grad.addColorStop(0.5, '#0f1c2e');
+    grad.addColorStop(1, '#07101e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    // Foto de fundo (se tiver)
+    const drawContent = (imgSrc) => {
+      if (imgSrc) {
+        const img = new Image();
+        img.onload = () => {
+          // Foto ocupando parte do fundo com overlay
+          ctx.save();
+          ctx.globalAlpha = 0.25;
+          const ratio = img.width / img.height;
+          const dh = 1920;
+          const dw = dh * ratio;
+          ctx.drawImage(img, (1080 - dw) / 2, 0, dw, dh);
+          ctx.restore();
+          // Overlay escuro
+          ctx.fillStyle = 'rgba(7,16,30,0.7)';
+          ctx.fillRect(0, 0, 1080, 1920);
+          drawTexto(d, ctx, tipoLabels, emojiEscala, hoje);
+        };
+        img.src = imgSrc;
+      } else {
+        drawTexto(d, ctx, tipoLabels, emojiEscala, hoje);
+      }
+    };
+
+    const photoEl = document.getElementById('photo-preview');
+    drawContent(photoEl.classList.contains('visible') ? photoEl.src : null);
+  }
+
+  function drawTexto(d, ctx, tipoLabels, emojiEscala, hoje) {
+    const cx = 540;
+
+    // Linha decorativa topo
+    ctx.fillStyle = '#E8803A';
+    ctx.fillRect(cx - 40, 140, 80, 4);
+
+    // Logo
+    ctx.font = '900 52px Poppins, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.fillText('HABITUS', cx, 230);
+    ctx.fillStyle = '#E8803A';
+    ctx.fillText('360', cx, 290);
+
+    // Separador
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(120, 330, 840, 1);
+
+    // Headline
+    ctx.font = '900 96px Poppins, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.fillText('TREINO', cx, 500);
+    ctx.fillStyle = '#E8803A';
+    ctx.fillText('CONCLUIDO', cx, 610);
+    ctx.font = '700 80px Poppins, sans-serif';
+    ctx.fillStyle = '#48bb78';
+    ctx.fillText('✓', cx, 720);
+
+    // Card central
+    roundRect(ctx, 100, 780, 880, 500, 40, 'rgba(15,28,46,0.9)', 'rgba(232,128,58,0.3)');
+
+    // Nome
+    ctx.font = '700 48px Poppins, sans-serif';
+    ctx.fillStyle = '#E8803A';
+    ctx.textAlign = 'center';
+    ctx.fillText((nomeUsuario || 'Voce').toUpperCase(), cx, 870);
+
+    // Tipo treino
+    ctx.font = '600 38px Poppins, sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(tipoLabels[d.tipo_treino] || 'Treino', cx, 940);
+
+    // Stats
+    ctx.font = '900 110px Poppins, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(d.duracao_min + ' min', cx - 200, 1080);
+
+    if (d.kcal_estimada) {
+      ctx.font = '900 110px Poppins, sans-serif';
+      ctx.fillStyle = '#E8803A';
+      ctx.fillText(d.kcal_estimada, cx + 200, 1080);
+      ctx.font = '500 32px Poppins, sans-serif';
+      ctx.fillStyle = '#6b7a8d';
+      ctx.fillText('kcal est.', cx + 200, 1130);
+    }
+
+    ctx.font = '500 32px Poppins, sans-serif';
+    ctx.fillStyle = '#6b7a8d';
+    ctx.fillText('duracao', cx - 200, 1130);
+
+    // Intensidade
+    if (d.intensidade) {
+      ctx.font = '600 40px Poppins, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText('Intensidade ' + emojiEscala[d.intensidade] + ' ' + d.intensidade + '/5', cx, 1210);
+    }
+
+    // Nota
+    if (d.nota) {
+      ctx.font = 'italic 34px Poppins, sans-serif';
+      ctx.fillStyle = 'rgba(226,232,240,0.7)';
+      const maxW = 800;
+      wrapText(ctx, '"' + d.nota + '"', cx, 1380, maxW, 48);
+    }
+
+    // Data
+    ctx.font = '500 30px Poppins, sans-serif';
+    ctx.fillStyle = '#6b7a8d';
+    ctx.fillText(hoje, cx, 1650);
+
+    // Hashtag
+    ctx.font = '700 36px Poppins, sans-serif';
+    ctx.fillStyle = '#E8803A';
+    ctx.fillText('#Habitus360', cx, 1730);
+
+    // Linha decorativa base
+    ctx.fillStyle = '#E8803A';
+    ctx.fillRect(cx - 40, 1790, 80, 4);
+  }
+
+  function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    let currentY = y;
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+        ctx.fillText(line, x, currentY);
+        line = words[n] + ' ';
+        currentY += lineHeight;
+      } else { line = testLine; }
+    }
+    ctx.fillText(line, x, currentY);
+  }
+
+  function downloadCard() {
+    const canvas = document.getElementById('share-canvas');
+    const link = document.createElement('a');
+    link.download = 'habitus360-treino-stories.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  function downloadCardQuadrado() {
+    // Gera versao quadrada 1080x1080
+    const orig = document.getElementById('share-canvas');
+    const sq = document.createElement('canvas');
+    sq.width = 1080;
+    sq.height = 1080;
+    const ctx = sq.getContext('2d');
+    // Centraliza o stories no quadrado
+    ctx.drawImage(orig, 0, -420, 1080, 1920);
+    const link = document.createElement('a');
+    link.download = 'habitus360-treino-feed.png';
+    link.href = sq.toDataURL('image/png');
+    link.click();
+  }
+</script>
+
+</body>
+</html>

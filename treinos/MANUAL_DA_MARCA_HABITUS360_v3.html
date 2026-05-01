@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual da Marca — Habitus 360 v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --creme:        #FEEBD8;
+  --creme-escuro: #F5D0A8;
+  --laranja:      #E8803A;
+  --laranja-hover:#D06A28;
+  --azul:         #2D6FA8;
+  --escuro:       #1C4E80;
+  --escuro-deep:  #0F3560;
+  --branco:       #FFFFFF;
+  --preto:        #111111;
+  --texto-medio:  #7A4A20;
+  --muted:        #888888;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--creme);
+  color: var(--preto);
+  font-size: 14px;
+}
+
+/* ══ CAPA ══ */
+.capa {
+  background: var(--escuro);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.capa::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,128,58,0.10) 0%, transparent 70%);
+  top: -150px; right: -150px;
+}
+.capa-logo   { width: 180px; margin-bottom: 48px; position: relative; z-index: 1; }
+.capa-tag    { font-size: 10px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; color: var(--laranja); margin-bottom: 12px; position: relative; z-index: 1; }
+.capa-nome   { font-size: 46px; font-weight: 900; color: var(--branco); letter-spacing: 5px; position: relative; z-index: 1; line-height: 1; }
+.capa-sub    { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.4); letter-spacing: 3px; margin-top: 10px; position: relative; z-index: 1; }
+.capa-linha  { width: 36px; height: 1px; background: var(--laranja); margin: 36px auto; position: relative; z-index: 1; }
+.capa-versao { font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 3px; text-transform: uppercase; position: relative; z-index: 1; }
+
+/* ══ LAYOUT ══ */
+.pagina  { max-width: 960px; margin: 0 auto; padding: 80px 40px; }
+.secao   { margin-bottom: 90px; }
+
+.secao-tag   { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--laranja); margin-bottom: 8px; }
+.secao-titulo{ font-size: 36px; font-weight: 900; color: var(--escuro); margin-bottom: 10px; line-height: 1.05; }
+.secao-desc  { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 560px; margin-bottom: 40px; }
+
+.divisor { height: 1px; background: linear-gradient(90deg, var(--laranja), var(--creme-escuro)); margin: 80px 0; opacity: 0.5; }
+
+/* ══ CARD BASE ══ */
+.card {
+  background: var(--branco);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+}
+.card-dark {
+  background: var(--escuro);
+  border-radius: 20px;
+  padding: 32px;
+}
+.card-bege {
+  background: var(--creme-escuro);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+/* ══ SUMÁRIO ══ */
+.sumario-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 4px; }
+.sum-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 10px; }
+.sum-item:hover { background: var(--creme); }
+.sum-num  { font-size: 11px; font-weight: 800; color: var(--laranja); width: 22px; }
+.sum-nome { font-size: 13px; font-weight: 500; }
+
+/* ══ LOGO GRID ══ */
+.logo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 12px; }
+.logo-card {
+  border-radius: 16px; padding: 36px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.logo-card img { width: 120px; height: 120px; object-fit: contain; }
+.logo-card-nome { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+.logo-card-uso  { font-size: 11px; text-align: center; line-height: 1.5; opacity: 0.7; }
+
+.lc-p { background: var(--escuro); color: white; }
+.lc-b { background: var(--creme); color: var(--escuro); border: 1px solid var(--creme-escuro); }
+.lc-deep { background: var(--escuro-deep); color: white; }
+.lc-laranja { background: var(--laranja); color: white; }
+
+/* ══ ÍCONES ══ */
+.icones-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-top: 10px; }
+.icone-card {
+  border-radius: 14px; padding: 20px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.icone-card img { width: 64px; height: 64px; object-fit: contain; }
+.icone-nome { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: center; }
+.icone-uso  { font-size: 10px; text-align: center; line-height: 1.4; opacity: 0.65; }
+
+/* ══ REGRAS LOGO ══ */
+.regras-logo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.regra-logo  { background: var(--branco); border-radius: 14px; padding: 22px; }
+.regra-logo-titulo { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid; }
+.regra-logo.sim .regra-logo-titulo { color: #4CAF50; border-color: #4CAF50; }
+.regra-logo.nao .regra-logo-titulo { color: #E57373; border-color: #E57373; }
+.regra-logo ul { list-style: none; }
+.regra-logo ul li { font-size: 12px; padding: 5px 0; border-bottom: 1px solid #f5f5f5; color: #555; }
+.regra-logo ul li:last-child { border: none; }
+.regra-logo.sim ul li::before { content: "✓ "; color: #4CAF50; font-weight: 700; }
+.regra-logo.nao ul li::before { content: "✗ "; color: #E57373; font-weight: 700; }
+
+/* ══ PALETA ══ */
+.paleta-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin: 28px 0 14px; }
+.paleta-grupo { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch { flex:1; min-width: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+.swatch-cor  { height: 80px; }
+.swatch-info { background: var(--branco); padding: 14px; }
+.sw-nome { font-weight: 700; font-size: 12px; }
+.sw-hex  { font-size: 11px; color: var(--muted); font-family: monospace; margin-top: 2px; }
+.sw-uso  { font-size: 11px; color: #666; margin-top: 6px; line-height: 1.4; }
+.badge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:2px 8px; border-radius:20px; margin-top:6px; }
+.badge-escuro  { background: var(--escuro);  color: white; }
+.badge-laranja { background: var(--laranja); color: white; }
+.badge-azul    { background: var(--azul);    color: white; }
+.badge-creme   { background: var(--creme-escuro); color: var(--escuro); }
+
+/* ══ PROPORÇÃO ══ */
+.proporcao-barra { display:flex; border-radius:10px; overflow:hidden; height:44px; }
+.pb-seg { display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+
+/* ══ TIPOGRAFIA ══ */
+.tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tipo-card { background: var(--branco); border-radius: 16px; padding: 28px; }
+.tipo-tag  { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--laranja); margin-bottom: 12px; }
+
+/* ══ TOM DE VOZ ══ */
+.tom-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.tom-card { background: var(--branco); border-radius: 16px; padding: 24px; }
+.tom-emoji  { font-size: 26px; margin-bottom: 10px; }
+.tom-titulo { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--laranja); }
+.tom-desc   { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.tom-comp   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tom-col-titulo { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid; }
+.tom-col.sim .tom-col-titulo { color: #4CAF50; border-color: #4CAF50; }
+.tom-col.nao .tom-col-titulo { color: #E57373; border-color: #E57373; }
+.tom-frase { font-size: 12px; padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; line-height: 1.5; }
+.tom-col.sim .tom-frase { background: #F1F8F1; color: var(--preto); }
+.tom-col.nao .tom-frase { background: #FFF0F0; color: #999; text-decoration: line-through; }
+
+/* ══ ESTRATÉGIA FEMINILIDADE ══ */
+.fem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fem-card { background: var(--branco); border-radius: 16px; padding: 24px; border-left: 3px solid var(--laranja); }
+.fem-titulo { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.fem-desc   { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+/* ══ INSTAGRAM ══ */
+.bio-box {
+  background: var(--creme); border-radius: 14px;
+  padding: 22px; font-size: 13px; line-height: 2.1;
+  border: 1px solid var(--creme-escuro); margin-top: 16px;
+}
+
+.hl-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 20px; }
+.hl-card { background: var(--branco); border-radius: 14px; padding: 20px; display: flex; align-items: center; gap: 14px; }
+.hl-icone { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.hl-nome  { font-size: 13px; font-weight: 700; }
+.hl-desc  { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+/* ══ FEED MOCKUP ══ */
+.feed-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 3px; border-radius: 14px; overflow: hidden;
+}
+.fp {
+  aspect-ratio: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 14px; text-align: center; position: relative;
+}
+.fp-preto { background: #1C4E80; color: white; }
+.fp-bege  { background: #FEEBD8; color: var(--escuro); }
+.fp-bege2 { background: #F5D0A8; color: var(--escuro); }
+.fp-rosa  { background: #E8803A; color: white; }
+
+.fp-emoji { font-size: 20px; margin-bottom: 6px; }
+.fp-tag   { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; margin-bottom: 4px; font-weight: 600; }
+.fp-texto { font-size: 10px; line-height: 1.4; font-weight: 700; }
+.fp-play  { position: absolute; top: 8px; right: 8px; font-size: 10px; opacity: 0.6; }
+.fp-logo  { position: absolute; bottom: 6px; right: 7px; font-size: 7px; font-weight: 800; opacity: 0.25; letter-spacing: 1px; }
+
+.feed-legenda { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.fl-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.fl-dot  { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+.regra-acento {
+  background: var(--creme-escuro); border-radius: 12px; padding: 16px;
+  margin-top: 16px; border-left: 3px solid var(--laranja);
+}
+
+/* ══ MIX ══ */
+.mix-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.mix-card { text-align: center; padding: 20px 12px; border-radius: 14px; }
+.mix-pct  { font-size: 28px; font-weight: 900; }
+.mix-nome { font-size: 12px; font-weight: 700; margin-top: 4px; }
+.mix-desc { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* ══ APLICAÇÕES ══ */
+.app-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.app-card { border-radius: 16px; padding: 28px 20px; text-align: center; }
+.app-card img { width: 84px; height: 84px; object-fit: contain; margin: 0 auto 14px; display: block; }
+.app-titulo { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.app-desc   { font-size: 11px; line-height: 1.5; opacity: 0.65; }
+
+/* ══ REGRAS GERAIS ══ */
+.regras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.regra-card  { background: var(--branco); border-radius: 16px; padding: 26px; }
+.regra-titulo { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid; }
+.regra-card.sim .regra-titulo { color: #4CAF50; border-color: #4CAF50; }
+.regra-card.nao .regra-titulo { color: #E57373; border-color: #E57373; }
+.regra-lista { list-style: none; }
+.regra-lista li { font-size: 12px; padding: 7px 0; border-bottom: 1px solid #f0f0f0; color: #555; line-height: 1.5; }
+.regra-lista li:last-child { border: none; }
+.regra-card.sim .regra-lista li::before { content: "✓ "; color: #4CAF50; font-weight: 700; }
+.regra-card.nao .regra-lista li::before { content: "✗ "; color: #E57373; font-weight: 700; }
+
+/* ══ RODAPÉ ══ */
+.rodape { background: var(--escuro); padding: 60px 40px; text-align: center; }
+.rodape img { width: 80px; margin-bottom: 24px; }
+.rodape p   { font-size: 11px; color: rgba(255,255,255,0.25); line-height: 2.2; letter-spacing: 1px; }
+.rodape span { color: var(--laranja); }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="capa">
+  <img src="1.png" alt="Habitus 360" class="capa-logo">
+  <div class="capa-tag">Manual da Marca · Versão 3.0</div>
+  <div class="capa-nome">HABITUS 360</div>
+  <div class="capa-sub">Plataforma de Bem-Estar Feminino</div>
+  <div class="capa-linha"></div>
+  <div class="capa-versao">Abril 2026 &nbsp;·&nbsp; Confidencial</div>
+</div>
+
+<div class="pagina">
+
+  <!-- SUMÁRIO -->
+  <div class="secao">
+    <div class="secao-tag">Índice</div>
+    <div class="secao-titulo">Sumário</div>
+    <div class="card">
+      <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;">Conteúdo deste Manual</div>
+      <div class="sumario-grid">
+        <div class="sum-item"><div class="sum-num">01</div><div class="sum-nome">Logo e Variações</div></div>
+        <div class="sum-item"><div class="sum-num">02</div><div class="sum-nome">Paleta de Cores</div></div>
+        <div class="sum-item"><div class="sum-num">03</div><div class="sum-nome">Tipografia</div></div>
+        <div class="sum-item"><div class="sum-num">04</div><div class="sum-nome">Estratégia de Feminilidade</div></div>
+        <div class="sum-item"><div class="sum-num">05</div><div class="sum-nome">Tom de Voz</div></div>
+        <div class="sum-item"><div class="sum-num">06</div><div class="sum-nome">Instagram — Bio e Highlights</div></div>
+        <div class="sum-item"><div class="sum-num">07</div><div class="sum-nome">Instagram — Feed e Reels</div></div>
+        <div class="sum-item"><div class="sum-num">08</div><div class="sum-nome">Aplicações e Regras Gerais</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 01 LOGO -->
+  <div class="secao">
+    <div class="secao-tag">01 — Identidade</div>
+    <div class="secao-titulo">Logo e Variações</div>
+    <div class="secao-desc">A logo é o ativo principal da marca. O círculo 360° representa abordagem completa; o foguete representa ascensão. Três versões principais: sobre fundo azul escuro (autoridade), sobre fundo creme (navegação e materiais claros) e sobre azul profundo (premium). A versão creme é a usada na navegação de todas as páginas.</div>
+
+    <div class="logo-grid">
+      <div class="logo-card lc-p">
+        <img src="1.png" alt="Logo Principal">
+        <div class="logo-card-nome">Versão Principal</div>
+        <div class="logo-card-uso">Sobre fundo azul escuro (#1C4E80). Versão oficial da marca. Uso em seções de autoridade e rodapé.</div>
+      </div>
+      <div class="logo-card lc-b">
+        <img src="3.png" alt="Logo Clara / Navegação">
+        <div class="logo-card-nome">Versão Clara — Navegação</div>
+        <div class="logo-card-uso">Sobre fundo creme (#FEEBD8). Usada na barra de navegação das páginas. Versão para fundos claros.</div>
+      </div>
+      <div class="logo-card lc-deep">
+        <img src="2.png" alt="Logo Deep">
+        <div class="logo-card-nome">Versão Deep</div>
+        <div class="logo-card-uso">Sobre fundo azul profundo (#0F3560). Para materiais premium e capas de alto contraste.</div>
+      </div>
+    </div>
+
+    <div class="logo-grid">
+      <div class="logo-card lc-laranja">
+        <img src="4.png" alt="Logo Acento Laranja">
+        <div class="logo-card-nome">Acento Laranja</div>
+        <div class="logo-card-uso">Sobre fundo laranja (#E8803A). Uso em CTAs, materiais de lançamento e campanhas Fundadoras.</div>
+      </div>
+      <div class="logo-card lc-p" style="grid-column:span 2; padding:28px 40px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px;align-self:flex-start;">Ícones — Foguete (todas as variações)</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <img src="5.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Branco/Escuro</div>
+          </div>
+          <div style="text-align:center;">
+            <img src="7.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Laranja/Escuro</div>
+          </div>
+          <div style="text-align:center;">
+            <img src="8.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Azul/Escuro</div>
+          </div>
+          <div style="text-align:center;">
+            <img src="9.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Laranja/Escuro</div>
+          </div>
+          <div style="text-align:center;background:var(--creme);border-radius:10px;padding:6px;">
+            <img src="10.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:#888;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Laranja/Creme</div>
+          </div>
+          <div style="text-align:center;background:var(--laranja);border-radius:10px;padding:6px;">
+            <img src="6.png" style="width:60px;height:60px;object-fit:contain;display:block;margin:0 auto 8px;">
+            <div style="font-size:9px;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Branco/Laranja</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="regras-logo">
+      <div class="regra-logo sim">
+        <div class="regra-logo-titulo">✓ Permitido</div>
+        <ul>
+          <li>Usar versão principal (1.png) sobre fundo azul escuro #1C4E80</li>
+          <li>Usar versão clara (3.png) sobre fundo creme #FEEBD8 — padrão de navegação</li>
+          <li>Usar versão deep (2.png) sobre fundo azul profundo #0F3560</li>
+          <li>Usar acento laranja (4.png) sobre fundo laranja #E8803A</li>
+          <li>Usar ícone foguete isolado para stamps e favicons</li>
+          <li>Redimensionar mantendo proporção original</li>
+        </ul>
+      </div>
+      <div class="regra-logo nao">
+        <div class="regra-logo-titulo">✗ Proibido</div>
+        <ul>
+          <li>Usar sobre fundos coloridos não aprovados</li>
+          <li>Distorcer, girar ou esticar o logo</li>
+          <li>Adicionar sombras ou efeitos não originais</li>
+          <li>Misturar versões (ex: logo colorida + fundo laranja)</li>
+          <li>Remover o texto "HABITUS 360" da versão completa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 02 PALETA -->
+  <div class="secao">
+    <div class="secao-tag">02 — Cores</div>
+    <div class="secao-titulo">Paleta de Cores</div>
+    <div class="secao-desc">Dois fundos. Um acento. Uma cor de credibilidade. Creme + Azul Escuro como base absoluta. Laranja como ponto de energia — com moderação. Azul para autoridade médica e científica.</div>
+
+    <div class="paleta-label">Bases — As duas únicas cores de fundo</div>
+    <div class="paleta-grupo">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#1C4E80;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Azul Escuro</div>
+          <div class="sw-hex">#1C4E80</div>
+          <div class="sw-uso">Fundo principal · Posts de impacto · Capa · Reels · Autoridade</div>
+          <div class="badge badge-escuro">Base Principal</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#FEEBD8; border:1px solid #F5D0A8;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Creme</div>
+          <div class="sw-hex">#FEEBD8</div>
+          <div class="sw-uso">Fundo claro · Posts educativos · Depoimentos · Material impresso</div>
+          <div class="badge badge-creme">Base Secundária</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#F5D0A8; border:1px solid #e8be90;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Creme Escuro</div>
+          <div class="sw-hex">#F5D0A8</div>
+          <div class="sw-uso">Variação do creme · Cards · Separadores · Detalhes</div>
+          <div class="badge badge-creme">Base Variação</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#FFFFFF; border:1px solid #eee;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Branco</div>
+          <div class="sw-hex">#FFFFFF</div>
+          <div class="sw-uso">Tipografia sobre escuro · Cards internos · Ícones</div>
+          <div class="badge badge-escuro">Texto/Ícone</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paleta-label" style="margin-top:28px;">Acento Único — Laranja</div>
+    <div class="paleta-grupo">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#E8803A;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Laranja</div>
+          <div class="sw-hex">#E8803A</div>
+          <div class="sw-uso">Destaques · CTAs · Lançamento · Fundadoras · Acento de energia</div>
+          <div class="badge badge-laranja">Acento Único</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#D06A28;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Laranja Hover</div>
+          <div class="sw-hex">#D06A28</div>
+          <div class="sw-uso">Estado hover de botões laranja · Destaque intenso</div>
+          <div class="badge badge-laranja">Variação</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paleta-label" style="margin-top:28px;">Cor de Credibilidade — Azul Médico</div>
+    <div class="paleta-grupo">
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#2D6FA8;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Azul</div>
+          <div class="sw-hex">#2D6FA8</div>
+          <div class="sw-uso">Seções médicas · Credibilidade · Ciência · Time de saúde</div>
+          <div class="badge badge-azul">Credibilidade</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-cor" style="background:#0F3560;"></div>
+        <div class="swatch-info">
+          <div class="sw-nome">Azul Profundo</div>
+          <div class="sw-hex">#0F3560</div>
+          <div class="sw-uso">Fundo de seções de máxima autoridade · Deep background</div>
+          <div class="badge badge-escuro">Deep</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proporção -->
+    <div class="card" style="margin-top:24px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;">Regra de Proporção no Conteúdo</div>
+      <div class="proporcao-barra">
+        <div class="pb-seg" style="flex:45;background:var(--creme);color:var(--escuro);border-top:1px solid var(--creme-escuro);border-bottom:1px solid var(--creme-escuro);">45% Creme</div>
+        <div class="pb-seg" style="flex:40;background:var(--escuro);color:white;">40% Azul Escuro</div>
+        <div class="pb-seg" style="flex:15;background:var(--laranja);color:white;">15%</div>
+      </div>
+      <div style="display:flex;margin-top:8px;">
+        <div style="flex:45;font-size:11px;color:var(--muted);text-align:center;">Creme — Educativo e acolhedor</div>
+        <div style="flex:40;font-size:11px;color:var(--muted);text-align:center;">Azul Escuro — Impacto e autoridade</div>
+        <div style="flex:15;font-size:11px;color:var(--muted);text-align:center;">Laranja</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 03 TIPOGRAFIA -->
+  <div class="secao">
+    <div class="secao-tag">03 — Tipografia</div>
+    <div class="secao-titulo">Fontes Oficiais</div>
+    <div class="secao-desc">Poppins é a única fonte utilizada em todo o conteúdo digital. Variações de peso criam a hierarquia necessária sem precisar de outra família tipográfica.</div>
+
+    <div class="tipo-grid">
+      <div class="tipo-card">
+        <div class="tipo-tag">Títulos e Destaques</div>
+        <div style="font-size:36px;font-weight:900;line-height:1;margin-bottom:8px;">Habitus 360</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Poppins Black 900 / ExtraBold 800</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-weight:900;font-size:13px;">900 Black — Headline principal do post</div>
+          <div style="font-weight:800;font-size:13px;">800 ExtraBold — Títulos de seção</div>
+          <div style="font-weight:700;font-size:13px;">700 Bold — Subtítulos e destaques</div>
+        </div>
+      </div>
+      <div class="tipo-card">
+        <div class="tipo-tag">Corpo e Legendas</div>
+        <div style="font-size:22px;font-weight:400;line-height:1.3;margin-bottom:8px;">Texto de apoio</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Poppins Regular / Medium / Light</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-weight:600;font-size:13px;">600 SemiBold — Tags e categorias</div>
+          <div style="font-weight:500;font-size:13px;">500 Medium — Textos secundários</div>
+          <div style="font-weight:300;font-size:13px;">300 Light — Legendas e notas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="tipo-tag">Hierarquia no Instagram</div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
+        <div style="font-size:28px;font-weight:900;">Headline do post — 28px / 900</div>
+        <div style="font-size:17px;font-weight:700;color:var(--laranja);">Subtítulo — 17px / 700 · Laranja</div>
+        <div style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:3px;text-transform:uppercase;">CATEGORIA / TAG — 12PX / 600 · UPPERCASE</div>
+        <div style="font-size:13px;font-weight:400;color:#555;line-height:1.6;">Corpo do post e legenda — 13px / 400 Regular</div>
+        <div style="font-size:10px;font-weight:300;color:#aaa;letter-spacing:2px;text-transform:uppercase;">Nota final · Crédito · 10px / Light</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 04 ESTRATÉGIA DE FEMINILIDADE -->
+  <div class="secao">
+    <div class="secao-tag">04 — Posicionamento</div>
+    <div class="secao-titulo">Como Comunicar Feminilidade</div>
+    <div class="secao-desc">A Habitus 360 não usa cor para comunicar que é feminina. A feminilidade vem das pessoas, dos temas e da linguagem — o mesmo princípio de Lululemon, Vempracrew e Peloton.</div>
+
+    <div class="card-dark" style="margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--laranja);margin-bottom:14px;">O Princípio Central</div>
+      <div style="font-size:19px;font-weight:700;color:white;line-height:1.5;">"Marcas neutras com conteúdo feminino vendem mais para mulheres do que marcas cor-de-rosa com mensagens genéricas."</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:14px;letter-spacing:1px;">Lululemon · Nike Women · Vempracrew · Peloton</div>
+    </div>
+
+    <div class="fem-grid">
+      <div class="fem-card">
+        <div class="fem-titulo">👩 As Pessoas Comunicam Feminilidade</div>
+        <div class="fem-desc">Embaixadoras, médicas e alunas são o rosto do conteúdo. Mulheres reais em movimento comunicam mais do que qualquer cor. Gabriel aparece como arquiteto técnico — não como protagonista emocional.</div>
+      </div>
+      <div class="fem-card">
+        <div class="fem-titulo">🩸 Os Temas São o Diferencial</div>
+        <div class="fem-desc">Ciclo menstrual, TPM, gestação, pós-parto, menopausa. Quando a marca aborda essas dores, qualquer mulher entende que aquilo foi feito para ela — sem precisar ver uma cor específica.</div>
+      </div>
+      <div class="fem-card">
+        <div class="fem-titulo">💬 A Linguagem Cria Pertencimento</div>
+        <div class="fem-desc">Tom acolhedor, empático, sem julgamento. Falar como uma amiga que entende de saúde feminina é mais poderoso do que qualquer escolha visual.</div>
+      </div>
+      <div class="fem-card">
+        <div class="fem-titulo">👩‍⚕️ O Time Médico É a Autoridade</div>
+        <div class="fem-desc">Nutricionista, ginecologista e psiquiatra como vozes de conteúdo. Isso comunica cuidado e segurança de forma que nenhuma cor consegue. É o maior diferencial da plataforma.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 05 TOM DE VOZ -->
+  <div class="secao">
+    <div class="secao-tag">05 — Comunicação</div>
+    <div class="secao-titulo">Tom de Voz</div>
+    <div class="secao-desc">Como a marca escreve, fala e se expressa em todo ponto de contato público.</div>
+
+    <div class="tom-grid" style="margin-bottom:16px;">
+      <div class="tom-card">
+        <div class="tom-emoji">🤝</div>
+        <div class="tom-titulo">Acolhedor</div>
+        <div class="tom-desc">Como uma amiga que entende de saúde. Próximo, empático, nunca julgador sobre corpo ou rotina.</div>
+      </div>
+      <div class="tom-card">
+        <div class="tom-emoji">👩‍⚕️</div>
+        <div class="tom-titulo">Técnico com leveza</div>
+        <div class="tom-desc">Embasamento médico real traduzido em linguagem acessível. Ciência sem academicismo.</div>
+      </div>
+      <div class="tom-card">
+        <div class="tom-emoji">💪</div>
+        <div class="tom-titulo">Motivador real</div>
+        <div class="tom-desc">Celebra consistência, não perfeição. Nunca promete milagre. Avanços pequenos são vitórias.</div>
+      </div>
+      <div class="tom-card">
+        <div class="tom-emoji">🎯</div>
+        <div class="tom-titulo">Direto</div>
+        <div class="tom-desc">Frases curtas e objetivas. Entrega valor rápido. Sem rodeios — especialmente em Reels.</div>
+      </div>
+      <div class="tom-card">
+        <div class="tom-emoji">🌸</div>
+        <div class="tom-titulo">Feminino sem clichê</div>
+        <div class="tom-desc">Fala de ciclo, gestação e menopausa como temas normais. Sem "corpo perfeito" ou pressão estética.</div>
+      </div>
+      <div class="tom-card">
+        <div class="tom-emoji">🙌</div>
+        <div class="tom-titulo">Inclusivo</div>
+        <div class="tom-desc">Todos os corpos, idades e níveis. Iniciantes são tão bem-vindas quanto avançadas.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;">Exemplos de Linguagem</div>
+      <div class="tom-comp">
+        <div class="tom-col sim">
+          <div class="tom-col-titulo">✓ Escreva assim</div>
+          <div class="tom-frase">"Treinar na TPM é possível — e o corpo agradece quando você respeita o ritmo certo."</div>
+          <div class="tom-frase">"Você não precisa de horas na academia. Precisa do método certo para o seu corpo."</div>
+          <div class="tom-frase">"Nossa ginecologista explica por que a balança mente na fase lútea."</div>
+          <div class="tom-frase">"Consistência bate perfeição. Sempre."</div>
+        </div>
+        <div class="tom-col nao">
+          <div class="tom-col-titulo">✗ Nunca escreva</div>
+          <div class="tom-frase">"Emagreça 10kg em 30 dias sem esforço!"</div>
+          <div class="tom-frase">"Corpo dos sonhos com nossa plataforma incrível!"</div>
+          <div class="tom-frase">"Se você não treina, está perdendo tempo."</div>
+          <div class="tom-frase">"Promoção limitadíssima por tempo curto!!!"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 06 INSTAGRAM BIO E HIGHLIGHTS -->
+  <div class="secao">
+    <div class="secao-tag">06 — Instagram</div>
+    <div class="secao-titulo">Bio e Destaques</div>
+
+    <div class="card">
+      <div class="tipo-tag">Bio Oficial — @habitus.360</div>
+      <div class="bio-box">
+        <strong>Habitus 360</strong><br>
+        <span style="font-size:11px;color:var(--texto-medio);">Plataforma de Bem-Estar Feminino</span><br><br>
+        🌿 Treino, saúde e mente em 1 só lugar<br>
+        👩‍⚕️ Time médico: nutrição, ginecologia e psiquiatria<br>
+        💪 +1.500 mulheres transformadas<br>
+        📅 Lançamento: 07/07 · Seja Fundadora ↓<br><br>
+        <span style="font-weight:700;">🔗 habitus360.com.br/fundadoras</span>
+      </div>
+    </div>
+
+    <div class="hl-grid">
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--escuro);">🚀</div>
+        <div><div class="hl-nome">Comece Aqui</div><div class="hl-desc">O que é, como funciona, para quem é</div></div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--laranja);">⭐</div>
+        <div><div class="hl-nome">Resultados</div><div class="hl-desc">Depoimentos e transformações reais</div></div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--azul);">👩‍⚕️</div>
+        <div><div class="hl-nome">Time Médico</div><div class="hl-desc">Quem são as especialistas</div></div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--laranja);">💎</div>
+        <div><div class="hl-nome">Fundadoras</div><div class="hl-desc">Oferta exclusiva e benefícios</div></div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--creme-escuro);">🎬</div>
+        <div><div class="hl-nome">Bastidores</div><div class="hl-desc">Processo, equipe, embaixadoras</div></div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icone" style="background:var(--creme-escuro);">❓</div>
+        <div><div class="hl-nome">Dúvidas</div><div class="hl-desc">FAQ, garantia e suporte</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 07 FEED E REELS -->
+  <div class="secao">
+    <div class="secao-tag">07 — Instagram</div>
+    <div class="secao-titulo">Feed e Reels</div>
+    <div class="secao-desc">O feed alterna azul escuro e creme. O laranja aparece como acento em no máximo 1 de cada 9 posts. Reels são 70% do conteúdo.</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="tipo-tag">Mix de Conteúdo Semanal</div>
+      <div class="mix-grid" style="margin-top:16px;">
+        <div class="mix-card" style="background:var(--escuro);">
+          <div class="mix-pct" style="color:white;">40%</div>
+          <div class="mix-nome" style="color:white;">Educativo</div>
+          <div class="mix-desc" style="color:rgba(255,255,255,0.4);">Treinos, saúde, médicas</div>
+        </div>
+        <div class="mix-card" style="background:var(--creme);border:1px solid var(--creme-escuro);">
+          <div class="mix-pct" style="color:var(--escuro);">30%</div>
+          <div class="mix-nome" style="color:var(--escuro);">Inspiracional</div>
+          <div class="mix-desc">Motivação, histórias</div>
+        </div>
+        <div class="mix-card" style="background:var(--creme-escuro);">
+          <div class="mix-pct" style="color:var(--escuro);">20%</div>
+          <div class="mix-nome" style="color:var(--escuro);">Prova Social</div>
+          <div class="mix-desc">Depoimentos, alunas</div>
+        </div>
+        <div class="mix-card" style="background:var(--escuro);border:2px solid var(--laranja);">
+          <div class="mix-pct" style="color:var(--laranja);">10%</div>
+          <div class="mix-nome" style="color:white;">Vendas</div>
+          <div class="mix-desc" style="color:rgba(255,255,255,0.4);">CTAs, Fundadoras</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Mockup do Feed — Azul Escuro + Creme + Acento Laranja</div>
+      <div class="feed-grid">
+
+        <div class="fp fp-preto">
+          <div class="fp-play">▶</div>
+          <div class="fp-tag">Reel · Treino Feminino</div>
+          <div class="fp-emoji">💪</div>
+          <div class="fp-texto">20 min que mudam seu corpo</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-bege">
+          <div class="fp-tag">Saúde Hormonal</div>
+          <div class="fp-emoji">🩸</div>
+          <div class="fp-texto">Treino certo para cada fase do ciclo</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-preto">
+          <div class="fp-play">▶</div>
+          <div class="fp-tag">Time Médico</div>
+          <div class="fp-emoji">👩‍⚕️</div>
+          <div class="fp-texto">Ginecologista responde sobre menopausa</div>
+          <div class="fp-logo">H360</div>
+        </div>
+
+        <div class="fp fp-bege2">
+          <div class="fp-tag">Depoimento</div>
+          <div class="fp-emoji">❤️</div>
+          <div class="fp-texto">"Perdi 8kg em 3 meses sem academia"</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-rosa">
+          <div class="fp-tag">Lançamento</div>
+          <div class="fp-emoji">🚀</div>
+          <div class="fp-texto">07.07 — Seja Fundadora</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-preto">
+          <div class="fp-play">▶</div>
+          <div class="fp-tag">Reel · Treino Feminino</div>
+          <div class="fp-emoji">🔥</div>
+          <div class="fp-texto">Treino em casa — sem equipamento</div>
+          <div class="fp-logo">H360</div>
+        </div>
+
+        <div class="fp fp-bege">
+          <div class="fp-tag">Motivação</div>
+          <div class="fp-emoji">🌿</div>
+          <div class="fp-texto">"Consistência bate perfeição."</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-preto">
+          <div class="fp-tag">Saúde Hormonal</div>
+          <div class="fp-emoji">🥗</div>
+          <div class="fp-texto">O que comer antes do treino</div>
+          <div class="fp-logo">H360</div>
+        </div>
+        <div class="fp fp-preto">
+          <div class="fp-play">▶</div>
+          <div class="fp-tag">Time Médico · Yoga</div>
+          <div class="fp-emoji">🧘</div>
+          <div class="fp-texto">Yoga para iniciantes — 10 min</div>
+          <div class="fp-logo">H360</div>
+        </div>
+
+      </div>
+
+      <div class="feed-legenda">
+        <div class="fl-item"><div class="fl-dot" style="background:#1C4E80;"></div>Azul Escuro — Treino, impacto, autoridade (dominante)</div>
+        <div class="fl-item"><div class="fl-dot" style="background:#FEEBD8;border:1px solid #ccc;"></div>Creme — Educativo, depoimentos, motivação</div>
+        <div class="fl-item"><div class="fl-dot" style="background:#F5D0A8;border:1px solid #ccc;"></div>Creme Escuro — Depoimentos, variação</div>
+        <div class="fl-item"><div class="fl-dot" style="background:#E8803A;"></div>Laranja — Acento (máx. 1 em 9 posts)</div>
+      </div>
+
+      <div class="regra-acento">
+        <div style="font-size:11px;font-weight:700;color:var(--laranja);margin-bottom:4px;">Regra do Acento Laranja</div>
+        <div style="font-size:12px;color:#666;">O laranja aparece em no máximo 1 post a cada 9. Quando aparece, sinaliza lançamento, Fundadoras ou urgência de CTA. Usar demais dilui o impacto e quebra o diferencial da identidade azul/creme.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divisor"></div>
+
+  <!-- 08 APLICAÇÕES E REGRAS -->
+  <div class="secao">
+    <div class="secao-tag">08 — Aplicações</div>
+    <div class="secao-titulo">Aplicações e Regras Gerais</div>
+
+    <div class="app-grid" style="margin-bottom:20px;">
+      <div class="app-card" style="background:var(--escuro);">
+        <img src="1.png" alt="Instagram">
+        <div class="app-titulo" style="color:white;">Perfil Instagram</div>
+        <div class="app-desc" style="color:rgba(255,255,255,0.4);">Logo colorida em fundo azul escuro como foto de perfil</div>
+      </div>
+      <div class="app-card" style="background:var(--creme);border:1px solid var(--creme-escuro);">
+        <img src="2.png" alt="Material Impresso">
+        <div class="app-titulo" style="color:var(--escuro);">Material Impresso</div>
+        <div class="app-desc" style="color:var(--texto-medio);">Logo colorida em fundo creme para materiais físicos e papelaria</div>
+      </div>
+      <div class="app-card" style="background:var(--escuro);">
+        <img src="5.png" alt="Tapete">
+        <div class="app-titulo" style="color:white;">Tapete Fundadoras</div>
+        <div class="app-desc" style="color:rgba(255,255,255,0.4);">Foguete branco bordado no tapete das 50 primeiras</div>
+      </div>
+    </div>
+
+    <div class="regras-grid">
+      <div class="regra-card sim">
+        <div class="regra-titulo">✓ Sempre Fazer</div>
+        <ul class="regra-lista">
+          <li>Usar creme e azul escuro como fundos dominantes</li>
+          <li>Usar Poppins como única fonte em todo conteúdo</li>
+          <li>Incluir a logo em todos os posts do feed</li>
+          <li>Usar laranja com moderação — máx. 1 em 9 posts</li>
+          <li>Priorizar Reels — mínimo 70% do conteúdo</li>
+          <li>Mostrar mulheres reais como rosto do perfil</li>
+          <li>Incluir CTA em todo post publicado</li>
+          <li>Abordar temas femininos específicos com frequência</li>
+        </ul>
+      </div>
+      <div class="regra-card nao">
+        <div class="regra-titulo">✗ Nunca Fazer</div>
+        <ul class="regra-lista">
+          <li>Usar laranja como cor dominante do feed</li>
+          <li>Usar fundos coloridos além de creme e azul escuro</li>
+          <li>Alterar as cores originais da logo</li>
+          <li>Usar mais de 2 cores de fundo em um mesmo post</li>
+          <li>Publicar promessas de resultado milagroso</li>
+          <li>Usar linguagem de pressão estética ou body shaming</li>
+          <li>Usar fontes diferentes de Poppins</li>
+          <li>Distorcer ou alterar a proporção do logo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RODAPÉ -->
+<div class="rodape">
+  <img src="1.png" alt="Habitus 360">
+  <p>
+    <span>HABITUS 360</span> · Manual da Marca · Versão 3.0<br>
+    Abril 2026 · Documento Confidencial<br>
+    Design original: Raiza Naiara · Expansão estratégica: 2026
+  </p>
+</div>
+
+</body>
+</html>

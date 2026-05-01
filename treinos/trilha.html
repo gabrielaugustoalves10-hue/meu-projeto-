@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Descubra sua Trilha — Habitus 360</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --laranja: #E8803A;
+      --laranja-hover: #d4722f;
+      --navy: #07101e;
+      --card: #0f1c2e;
+      --card2: #162033;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(232,128,58,0.4);
+      --text: #e2e8f0;
+      --muted: #6b7a8d;
+      --muted2: #4a5568;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 80px;
+    }
+
+    .logo { margin-bottom: 32px; }
+    .logo img { height: 30px; }
+
+    /* PROGRESS */
+    .progress-wrap { width: 100%; max-width: 580px; margin-bottom: 28px; }
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-step-label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; }
+    .progress-pct { font-size: 12px; font-weight: 700; color: var(--laranja); }
+    .progress-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--laranja); border-radius: 100px; transition: width 0.4s ease; }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      max-width: 580px;
+      width: 100%;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .step-number {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--laranja);
+      margin-bottom: 14px;
+    }
+
+    .step h2 {
+      font-size: clamp(18px, 3.5vw, 22px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .step .hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* OPTIONS */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .option:hover { border-color: var(--border-hover); background: rgba(232,128,58,0.04); }
+    .option.selected { border-color: var(--laranja); background: rgba(232,128,58,0.07); }
+
+    .option-radio {
+      width: 18px; height: 18px;
+      border: 2px solid var(--muted2);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .option.selected .option-radio {
+      border-color: var(--laranja);
+    }
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px;
+      background: var(--laranja);
+      border-radius: 50%;
+    }
+
+    .option-text strong { display: block; font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+    .option-text span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* INPUTS */
+    .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .input-group label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .input-wrap { position: relative; }
+    .input-wrap input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 48px 14px 16px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    .input-wrap input::-webkit-outer-spin-button,
+    .input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .input-wrap input:focus { border-color: var(--laranja); }
+    .input-wrap .unit {
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    /* IMC DISPLAY */
+    .imc-box {
+      background: rgba(232,128,58,0.06);
+      border: 1px solid rgba(232,128,58,0.2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 8px;
+      display: none;
+    }
+    .imc-box.visible { display: flex; align-items: center; justify-content: space-between; }
+    .imc-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    .imc-value { font-size: 28px; font-weight: 900; color: var(--laranja); }
+    .imc-class { font-size: 12px; font-weight: 600; color: var(--text); margin-top: 2px; }
+
+    /* NAME INPUT */
+    .name-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .name-input::placeholder { color: var(--muted2); font-weight: 400; }
+    .name-input:focus { border-color: var(--laranja); }
+
+    /* BUTTON */
+    .btn-next {
+      display: block;
+      width: 100%;
+      margin-top: 22px;
+      background: var(--laranja);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, opacity 0.2s;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .btn-next.ready { opacity: 1; pointer-events: all; }
+    .btn-next.ready:hover { background: var(--laranja-hover); transform: translateY(-1px); }
+
+    /* RESULTADO */
+    #result { display: none; }
+
+    .result-header { text-align: center; margin-bottom: 28px; }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(232,128,58,0.1);
+      border: 1px solid rgba(232,128,58,0.3);
+      color: var(--laranja);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .result-header h2 {
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .result-header h2 em { color: var(--laranja); font-style: normal; }
+    .result-header p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    /* IMC RESULT CARD */
+    .imc-result {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .imc-stat {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .imc-stat .s-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .imc-stat .s-value { font-size: 20px; font-weight: 900; color: #fff; }
+    .imc-stat .s-value.orange { color: var(--laranja); }
+    .imc-stat .s-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--laranja);
+      margin: 22px 0 12px;
+    }
+
+    .trail-items { display: flex; flex-direction: column; gap: 8px; }
+    .trail-item {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .trail-item strong { display: block; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .trail-item span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .trail-item .tag {
+      display: inline-block;
+      background: rgba(232,128,58,0.12);
+      color: var(--laranja);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      background: var(--laranja);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 17px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 12px;
+    }
+    .btn-primary:hover { background: var(--laranja-hover); transform: translateY(-1px); }
+
+    .result-note { font-size: 11px; color: var(--muted2); text-align: center; line-height: 1.6; }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 18px; }
+      .input-row { grid-template-columns: 1fr; }
+      .imc-result { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <img src="img/logo.svg" alt="Habitus 360" />
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-step-label" id="progress-label">Pergunta 1 de 9</span>
+      <span class="progress-pct" id="progress-pct">11%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:11%"></div>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <!-- STEP 1 — NOME -->
+    <div class="step active" id="step-1">
+      <div class="step-number">Pergunta 1 de 9</div>
+      <h2>Qual o seu nome?</h2>
+      <p class="hint">Sua trilha será personalizada para você.</p>
+      <input type="text" class="name-input" id="field-nome" placeholder="Digite seu primeiro nome" autocomplete="off" />
+      <button class="btn-next" id="btn-1" onclick="nextStep(1)">Continuar</button>
+    </div>
+
+    <!-- STEP 2 — IDADE -->
+    <div class="step" id="step-2">
+      <div class="step-number">Pergunta 2 de 9</div>
+      <h2>Qual a sua faixa de idade?</h2>
+      <p class="hint">A idade impacta nas recomendações hormonais e de treino.</p>
+      <div class="options" data-step="2">
+        <div class="option" data-value="18-25">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>18 a 25 anos</strong>
+          </div>
+        </div>
+        <div class="option" data-value="26-35">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>26 a 35 anos</strong>
+          </div>
+        </div>
+        <div class="option" data-value="36-45">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>36 a 45 anos</strong>
+            <span>Fase em que equilibrio hormonal ganha mais atenção</span>
+          </div>
+        </div>
+        <div class="option" data-value="45+">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Acima de 45 anos</strong>
+            <span>Perimenopausa e menopausa — protocolo específico</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-2" onclick="nextStep(2)">Continuar</button>
+    </div>
+
+    <!-- STEP 3 — ALTURA E PESO -->
+    <div class="step" id="step-3">
+      <div class="step-number">Pergunta 3 de 9</div>
+      <h2>Qual sua altura e peso atual?</h2>
+      <p class="hint">Esses dados calculam seu IMC e definem o ponto de partida ideal da sua trilha.</p>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Altura</label>
+          <div class="input-wrap">
+            <input type="number" id="field-altura" placeholder="170" min="100" max="220" oninput="calcIMC()" />
+            <span class="unit">cm</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Peso</label>
+          <div class="input-wrap">
+            <input type="number" id="field-peso" placeholder="65" min="30" max="250" oninput="calcIMC()" />
+            <span class="unit">kg</span>
+          </div>
+        </div>
+      </div>
+      <div class="imc-box" id="imc-box">
+        <div>
+          <div class="imc-label">Seu IMC</div>
+          <div class="imc-value" id="imc-value">—</div>
+          <div class="imc-class" id="imc-class"></div>
+        </div>
+        <div style="text-align:right">
+          <div class="imc-label">Referencia</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.8">
+            Abaixo do peso: &lt;18.5<br>
+            Normal: 18.5 – 24.9<br>
+            Sobrepeso: 25 – 29.9<br>
+            Obesidade: 30+
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-3" onclick="nextStep(3)">Continuar</button>
+    </div>
+
+    <!-- STEP 4 — ONDE TREINAR -->
+    <div class="step" id="step-4">
+      <div class="step-number">Pergunta 4 de 9</div>
+      <h2>Onde você quer treinar?</h2>
+      <p class="hint">Os módulos recomendados variam conforme seu local de treino.</p>
+      <div class="options" data-step="4">
+        <div class="option" data-value="casa">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Em casa</strong>
+            <span>Sem equipamento ou com pouco material — treino no seu espaco</span>
+          </div>
+        </div>
+        <div class="option" data-value="academia">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Na academia</strong>
+            <span>Com acesso a equipamentos e maquinas</span>
+          </div>
+        </div>
+        <div class="option" data-value="ambos">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Os dois</strong>
+            <span>Academia em alguns dias, casa em outros</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-4" onclick="nextStep(4)">Continuar</button>
+    </div>
+
+    <!-- STEP 5 — OBJETIVO -->
+    <div class="step" id="step-5">
+      <div class="step-number">Pergunta 5 de 9</div>
+      <h2>O que você deseja conquistar?</h2>
+      <p class="hint">Escolha o resultado que mais representa o que voce quer ver.</p>
+      <div class="options" data-step="5">
+        <div class="option" data-value="magra-definida">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Magra e definida</strong>
+            <span>Perder gordura, reduzir medidas e aparecer o shape</span>
+          </div>
+        </div>
+        <div class="option" data-value="massa">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Massa muscular e forca</strong>
+            <span>Construir musculo, ganhar curvas e melhorar performance</span>
+          </div>
+        </div>
+        <div class="option" data-value="saude">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Saude e disposicao</strong>
+            <span>Mais energia, melhor sono e qualidade de vida no dia a dia</span>
+          </div>
+        </div>
+        <div class="option" data-value="hormonal">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Equilibrio hormonal</strong>
+            <span>Regular ciclo, TPM, humor e treinar de acordo com meu corpo feminino</span>
+          </div>
+        </div>
+        <div class="option" data-value="retorno">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Retorno pos-parto</strong>
+            <span>Voltar a treinar com seguranca e respeito ao meu momento</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-5" onclick="nextStep(5)">Continuar</button>
+    </div>
+
+    <!-- STEP 6 — DIAS POR SEMANA -->
+    <div class="step" id="step-6">
+      <div class="step-number">Pergunta 6 de 9</div>
+      <h2>Quantos dias por semana voce consegue treinar?</h2>
+      <p class="hint">Seja realista — a trilha se adapta a sua disponibilidade.</p>
+      <div class="options" data-step="6">
+        <div class="option" data-value="2">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>2 dias</strong>
+            <span>Agenda bem apertada — treino precisa ser eficiente</span>
+          </div>
+        </div>
+        <div class="option" data-value="3">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>3 dias</strong>
+            <span>Frequencia ideal para maioria dos resultados</span>
+          </div>
+        </div>
+        <div class="option" data-value="4">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>4 dias</strong>
+            <span>Boa consistencia com espaco para recuperacao</span>
+          </div>
+        </div>
+        <div class="option" data-value="5+">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>5 ou mais dias</strong>
+            <span>Alta dedicacao — foco em performance e evolucao</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-6" onclick="nextStep(6)">Continuar</button>
+    </div>
+
+    <!-- STEP 7 — LIMITACAO FISICA -->
+    <div class="step" id="step-7">
+      <div class="step-number">Pergunta 7 de 9</div>
+      <h2>Voce tem alguma limitacao fisica?</h2>
+      <p class="hint">Isso e importante para evitar exercicios inadequados para o seu caso.</p>
+      <div class="options" data-step="7">
+        <div class="option" data-value="nenhuma">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Nao tenho limitacoes</strong>
+            <span>Posso fazer qualquer tipo de treino</span>
+          </div>
+        </div>
+        <div class="option" data-value="joelho">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Dor ou lesao no joelho</strong>
+            <span>Preciso evitar impacto e exercicios de flexao profunda</span>
+          </div>
+        </div>
+        <div class="option" data-value="coluna">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Problema na coluna</strong>
+            <span>Hernia, dor lombar ou cervical</span>
+          </div>
+        </div>
+        <div class="option" data-value="assoalho">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Assoalho pelvico fragilizado</strong>
+            <span>Pos-parto, perda de urina ou desconforto pelvico</span>
+          </div>
+        </div>
+        <div class="option" data-value="outra">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Outra limitacao</strong>
+            <span>Lesao, cirurgia ou condicao especifica</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-7" onclick="nextStep(7)">Continuar</button>
+    </div>
+
+    <!-- STEP 8 — ALIMENTACAO -->
+    <div class="step" id="step-8">
+      <div class="step-number">Pergunta 8 de 9</div>
+      <h2>Como esta sua alimentacao hoje?</h2>
+      <p class="hint">Sem julgamento — apenas para entender de onde partimos.</p>
+      <div class="options" data-step="8">
+        <div class="option" data-value="boa">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Boa e equilibrada</strong>
+            <span>Como bem na maioria dos dias, tenho controle</span>
+          </div>
+        </div>
+        <div class="option" data-value="irregular">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Irregular</strong>
+            <span>Tem dias bons e dias ruins — nao tenho consistencia</span>
+          </div>
+        </div>
+        <div class="option" data-value="compulsao">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Sofro com compulsao ou fome emocional</strong>
+            <span>Como por ansiedade, estresse ou emocional</span>
+          </div>
+        </div>
+        <div class="option" data-value="nao-sei">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Nao sei por onde comecar</strong>
+            <span>Nunca tive orientacao nutricional e estou perdida</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-8" onclick="nextStep(8)">Continuar</button>
+    </div>
+
+    <!-- STEP 9 — DIFICULDADE -->
+    <div class="step" id="step-9">
+      <div class="step-number">Pergunta 9 de 9</div>
+      <h2>Qual e sua maior dificuldade para treinar?</h2>
+      <p class="hint">Ultima pergunta — a mais importante para sua consistencia.</p>
+      <div class="options" data-step="9">
+        <div class="option" data-value="tempo">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Falta de tempo</strong>
+            <span>Minha rotina nao deixa espaco para treinar</span>
+          </div>
+        </div>
+        <div class="option" data-value="motivacao">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Falta de motivacao e consistencia</strong>
+            <span>Comeco mas nao consigo manter</span>
+          </div>
+        </div>
+        <div class="option" data-value="emocional">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Ansiedade e sabotagem mental</strong>
+            <span>Minha cabeca me impede de seguir em frente</span>
+          </div>
+        </div>
+        <div class="option" data-value="inicio">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Nao sei por onde comecar</strong>
+            <span>Muita informacao, muita confusao — preciso de um caminho claro</span>
+          </div>
+        </div>
+        <div class="option" data-value="dor">
+          <div class="option-radio"></div>
+          <div class="option-text">
+            <strong>Dores e desconforto fisico</strong>
+            <span>Meu corpo doi ou me limita durante o treino</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" id="btn-9" onclick="showResult()">Ver minha trilha</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="result">
+      <div class="result-header">
+        <div class="result-badge">Trilha personalizada</div>
+        <h2 id="result-title">Trilha <em>Emagrecimento</em></h2>
+        <p id="result-sub"></p>
+      </div>
+
+      <div class="imc-result">
+        <div class="imc-stat">
+          <div class="s-label">IMC</div>
+          <div class="s-value orange" id="res-imc">—</div>
+          <div class="s-sub" id="res-imc-class">—</div>
+        </div>
+        <div class="imc-stat">
+          <div class="s-label">Dias/semana</div>
+          <div class="s-value" id="res-dias">—</div>
+          <div class="s-sub">de treino</div>
+        </div>
+        <div class="imc-stat">
+          <div class="s-label">Local</div>
+          <div class="s-value" style="font-size:14px;padding-top:6px" id="res-local">—</div>
+        </div>
+      </div>
+
+      <div class="section-title">Modulos de treino recomendados</div>
+      <div class="trail-items" id="trail-treino"></div>
+
+      <div class="section-title">Time medico — por onde comecar</div>
+      <div class="trail-items" id="trail-medico"></div>
+
+      <div class="section-title">Check-in semanal</div>
+      <div class="trail-items" id="trail-checkin"></div>
+
+      <hr class="divider" />
+
+      <a href="https://habitus360.curseduca.pro/m/courses" class="btn-primary" target="_blank">
+        Comecar minha trilha na plataforma
+      </a>
+      <p class="result-note">
+        Voce pode navegar livremente pela plataforma a qualquer momento.<br>
+        Sua trilha e um ponto de partida — nao uma limitacao.
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    const answers = {};
+    let nome = '';
+    let imcVal = 0;
+    let imcClass = '';
+
+    // Nome input
+    const nomeInput = document.getElementById('field-nome');
+    const btn1 = document.getElementById('btn-1');
+    nomeInput.addEventListener('input', () => {
+      if (nomeInput.value.trim().length >= 2) btn1.classList.add('ready');
+      else btn1.classList.remove('ready');
+    });
+
+    // Options selection
+    document.querySelectorAll('.options').forEach(group => {
+      group.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          const step = group.dataset.step;
+          answers['q' + step] = opt.dataset.value;
+          document.getElementById('btn-' + step).classList.add('ready');
+        });
+      });
+    });
+
+    // IMC calc
+    function calcIMC() {
+      const h = parseFloat(document.getElementById('field-altura').value);
+      const w = parseFloat(document.getElementById('field-peso').value);
+      const box = document.getElementById('imc-box');
+      const btn = document.getElementById('btn-3');
+      if (h > 100 && h < 250 && w > 20 && w < 300) {
+        const imc = w / ((h / 100) ** 2);
+        imcVal = imc;
+        let cls = '';
+        if (imc < 18.5) cls = 'Abaixo do peso';
+        else if (imc < 25) cls = 'Peso normal';
+        else if (imc < 30) cls = 'Sobrepeso';
+        else cls = 'Obesidade';
+        imcClass = cls;
+        document.getElementById('imc-value').textContent = imc.toFixed(1);
+        document.getElementById('imc-class').textContent = cls;
+        box.classList.add('visible');
+        answers['imc'] = imc.toFixed(1);
+        answers['imcClass'] = cls;
+        answers['altura'] = h;
+        answers['peso'] = w;
+        btn.classList.add('ready');
+      } else {
+        box.classList.remove('visible');
+        btn.classList.remove('ready');
+      }
+    }
+
+    // Progress update
+    const totalSteps = 9;
+    function updateProgress(step) {
+      const pct = Math.round((step / totalSteps) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-pct').textContent = pct + '%';
+      if (step <= totalSteps) {
+        document.getElementById('progress-label').textContent = 'Pergunta ' + step + ' de ' + totalSteps;
+      } else {
+        document.getElementById('progress-label').textContent = 'Trilha encontrada';
+      }
+    }
+
+    function nextStep(current) {
+      if (current === 1) nome = nomeInput.value.trim().split(' ')[0];
+      document.getElementById('step-' + current).classList.remove('active');
+      document.getElementById('step-' + (current + 1)).classList.add('active');
+      updateProgress(current + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // TRILHA LOGIC
+    function calcTrilha() {
+      const objetivo = answers['q5'];
+      const limitacao = answers['q7'];
+      const imc = imcVal;
+
+      if (objetivo === 'retorno' || limitacao === 'assoalho') return 'retorno';
+      if (objetivo === 'hormonal') return 'hormonal';
+      if (objetivo === 'saude') return 'saude';
+      if (objetivo === 'massa' && imc >= 18.5) return 'massa';
+      if (imc >= 30) return 'emagrecimento';
+      if (objetivo === 'magra-definida') {
+        if (imc < 25 && (answers['q3nivel'] === 'evolucao')) return 'definicao';
+        return 'emagrecimento';
+      }
+      return 'emagrecimento';
+    }
+
+    function getModulosTreino(key, local) {
+      const casa = local === 'casa' || local === 'ambos';
+      const academia = local === 'academia' || local === 'ambos';
+      const limitacao = answers['q7'];
+      const dias = answers['q6'];
+      const semImpacto = limitacao === 'joelho' || limitacao === 'coluna' || limitacao === 'assoalho';
+
+      const modulos = {
+        emagrecimento: [
+          { tag: 'Semanas 1-2', strong: 'Seca 10', span: '10 minutos por dia. Ativa o metabolismo e elimina a desculpa da falta de tempo.' },
+          casa ? { tag: 'Semanas 3-6', strong: 'Corpo Slim — Casa', span: 'Progressao de intensidade sem equipamento.' } : null,
+          academia ? { tag: 'Semanas 5-8', strong: 'Corpo Slim — Academia', span: 'Com equipamentos para potencializar a queima.' } : null,
+          semImpacto ? { tag: 'Complementar', strong: 'LPF — Low Pressure Fitness', span: 'Treino de baixo impacto ideal para suas limitacoes.' } : null,
+        ],
+        definicao: [
+          academia ? { tag: 'Foco principal', strong: 'Shape On — Academia', span: 'Hipertrofia com deficit calorico leve para definicao muscular.' } : null,
+          casa ? { tag: 'Dias alternativos', strong: 'Shape On — Casa', span: 'Mantem o estimulo nos dias sem academia.' } : null,
+          { tag: 'Finalizador', strong: 'Seca 10', span: 'Use como finalizador nos dias de treino para maximizar queima.' },
+        ],
+        massa: [
+          academia ? { tag: 'Foco principal', strong: 'Grupos Musculares — Academia', span: 'Divisao por grupos para maximo estimulo de hipertrofia.' } : null,
+          academia ? { tag: 'Alternado', strong: 'Shape On — Academia', span: 'Varia o estimulo e previne adaptacao.' } : null,
+          casa ? { tag: 'Manutencao', strong: 'Shape On — Casa', span: 'Mobilidade e ativacao nos dias sem academia.' } : null,
+        ],
+        saude: [
+          { tag: 'Diario', strong: 'Seca 10', span: '10 minutos movem o corpo sem criar resistencia — perfeito para comecar.' },
+          { tag: 'Semanas 2+', strong: 'Yoga', span: 'Mobilidade, respiracao e equilibrio mental integrados.' },
+          { tag: 'Diario', strong: 'Meditacao', span: '5 minutos por dia transformam o estado emocional e o foco.' },
+          semImpacto ? { tag: 'Complementar', strong: 'LPF', span: 'Baixo impacto, alto beneficio para o core e assoalho pelvico.' } : null,
+        ],
+        hormonal: [
+          { tag: 'Fase menstrual', strong: 'Seca 10', span: 'Treino curto e leve nos dias de menstruacao. Sem culpa, com estrategia.' },
+          { tag: 'Fase folicula/lutea', strong: 'LPF — Low Pressure Fitness', span: 'Trabalha o assoalho pelvico e o core profundo.' },
+          casa ? { tag: 'Fase ovulatorica', strong: 'Corpo Slim — Casa', span: 'Aproveite o pico de energia para treinos mais intensos.' } : null,
+          academia ? { tag: 'Fase ovulatorica', strong: 'Shape On — Academia', span: 'Maximo estimulo no periodo de mais energia do ciclo.' } : null,
+          { tag: 'Sempre', strong: 'Yoga e Meditacao', span: 'Regularidade emocional e hormonal ao longo do mes.' },
+        ],
+        retorno: [
+          { tag: 'Semanas 1-4', strong: 'Seca 10', span: '10 minutos de movimento suave. Objetivo e reativar, nao exaurir.' },
+          { tag: 'Paralelo', strong: 'LPF — Low Pressure Fitness', span: 'Recuperacao do assoalho pelvico e core — essencial no pos-parto.' },
+          { tag: 'Semanas 5+', strong: 'Corpo Slim — Casa', span: 'Somente quando o corpo sinalizar que esta pronta. Sem comparacao.' },
+          { tag: 'Sempre', strong: 'Yoga', span: 'Respiracao, mobilidade e reconexao com o proprio corpo.' },
+        ],
+      };
+
+      return (modulos[key] || []).filter(Boolean);
+    }
+
+    function getMedico(key, alimentacao, idade, limitacao) {
+      const base = {
+        emagrecimento: [
+          { tag: 'Malu — Nutricionista', strong: 'Por onde comecar', span: 'Emagrecimento → Comportamento Alimentar → Organizacao e Planejamento' },
+          alimentacao === 'compulsao' ? { tag: 'Dra. Larissa — Psiquiatra', strong: 'Prioritario para voce', span: 'Compulsao Alimentar e Fome Emocional — bloqueia a maioria dos resultados' } : { tag: 'Dra. Larissa — Psiquiatra', strong: 'Complementar', span: 'Consistencia e Saude Mental — para manter o foco na reta final' },
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Importante', span: 'Ciclo Menstrual e Treino — como treinar a favor do seu ciclo' },
+        ],
+        definicao: [
+          { tag: 'Malu — Nutricionista', strong: 'Por onde comecar', span: 'Emagrecimento → Suplementacao → Hipertrofia e Ganho de Massa' },
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Fundamental', span: 'Ciclo Menstrual — como distribuir a intensidade do treino por fase' },
+          { tag: 'Dra. Larissa — Psiquiatra', strong: 'Complementar', span: 'Consistencia — para manter foco na fase de definicao' },
+        ],
+        massa: [
+          { tag: 'Malu — Nutricionista', strong: 'Por onde comecar', span: 'Hipertrofia e Ganho de Massa → Suplementacao → Organizacao e Planejamento' },
+          { tag: 'Dra. Larissa — Psiquiatra', strong: 'Importante', span: 'Sono e Recuperacao — musculo cresce no descanso, nao no treino' },
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Complementar', span: 'Saude Hormonal — hormonios impactam diretamente no ganho de massa feminino' },
+        ],
+        saude: [
+          { tag: 'Dra. Larissa — Psiquiatra', strong: 'Por onde comecar', span: 'Saude Mental → Ansiedade → Sono e Equilibrio' },
+          { tag: 'Malu — Nutricionista', strong: 'Em seguida', span: 'Organizacao e Planejamento → Comportamento Alimentar' },
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Complementar', span: 'Saude Hormonal e Feminilidade em Equilibrio' },
+        ],
+        hormonal: [
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Por onde comecar', span: 'Ciclo Menstrual e Nutricao da Mulher → Saude Hormonal' },
+          { tag: 'Malu — Nutricionista', strong: 'Em seguida', span: 'Ciclo Menstrual e Nutricao da Mulher → Comportamento Alimentar' },
+          { tag: 'Dra. Larissa — Psiquiatra', strong: 'Importante', span: 'TPM e Saude Mental — ansiedade e humor variam com o ciclo' },
+        ],
+        retorno: [
+          { tag: 'Dra. Amanda — Ginecologista', strong: 'Por onde comecar', span: 'Retorno Pos-Parto → Saude Hormonal → Ciclo Menstrual' },
+          { tag: 'Malu — Nutricionista', strong: 'Em seguida', span: 'Organizacao e Planejamento → Emagrecimento com equilibrio' },
+          { tag: 'Dra. Larissa — Psiquiatra', strong: 'Essencial', span: 'Saude Mental no Pos-Parto — ansiedade e autocobranca nessa fase' },
+        ],
+      };
+
+      const extras = [];
+      if (idade === '45+') {
+        extras.push({ tag: 'Dra. Amanda — Atencao especial', strong: 'Perimenopausa e Menopausa', span: 'Conteudo especifico para sua faixa etaria dentro do modulo de saude hormonal' });
+      }
+
+      return [...(base[key] || []), ...extras];
+    }
+
+    function getCheckin(key, dificuldade) {
+      const base = {
+        emagrecimento: [
+          { strong: 'Alimentacao da semana', span: 'Manteve o plano? Onde escapou? Sem julgamento — apenas dado para ajuste.' },
+          { strong: 'Qualidade do sono', span: 'Sono ruim eleva o cortisol e dificulta o emagrecimento.' },
+          { strong: 'Hidratacao', span: 'Minimo 2 litros por dia — impacto direto no resultado.' },
+        ],
+        definicao: [
+          { strong: 'Medidas da semana', span: 'Cintura, quadril e braco — o shape muda antes da balanca.' },
+          { strong: 'Ingestao proteica', span: 'Proteina suficiente e decisiva para definicao muscular.' },
+          { strong: 'Energia nos treinos', span: 'Queda de energia indica necessidade de ajuste na alimentacao ou descanso.' },
+        ],
+        massa: [
+          { strong: 'Carga e progresso', span: 'Conseguiu aumentar carga ou repeticoes esta semana?' },
+          { strong: 'Calorias e proteina', span: 'Superavit calorico controlado e o combustivel da hipertrofia.' },
+          { strong: 'Sono e recuperacao', span: 'Minimo 7 horas — sem isso o treino nao converte em musculo.' },
+        ],
+        saude: [
+          { strong: 'Qualidade do sono', span: 'Sono e o termometro do bem-estar. Como dormiu essa semana?' },
+          { strong: 'Disposicao e energia', span: 'De 1 a 5 — como foi sua energia geral?' },
+          { strong: 'Humor e ansiedade', span: 'Teve momentos de alta ansiedade? O que aconteceu?' },
+        ],
+        hormonal: [
+          { strong: 'Fase do ciclo atual', span: 'Menstrual / Folicula / Ovulatorica / Lutea — isso define o treino da semana.' },
+          { strong: 'TPM e variacao de humor', span: 'Irritabilidade, inchaço, compulsao — registre para entender seus padroes.' },
+          { strong: 'Energia por fase', span: 'Como estava sua energia comparada a semana anterior?' },
+        ],
+        retorno: [
+          { strong: 'Como o corpo respondeu', span: 'Dores, desconforto ou sensacao positiva? Registre tudo.' },
+          { strong: 'Sono — mesmo com bebe', span: 'Sem sono de qualidade, recuperacao nao acontece.' },
+          { strong: 'Como esta se sentindo', span: 'Emocional importa tanto quanto o fisico nessa fase.' },
+        ],
+      };
+
+      const extras = [];
+      if (dificuldade === 'emocional') {
+        extras.push({ strong: 'Estado emocional semanal', span: 'Como a ansiedade impactou seus treinos e alimentacao esta semana?' });
+      }
+      if (dificuldade === 'tempo') {
+        extras.push({ strong: 'Treinos realizados x planejados', span: 'Quantos dos treinos previstos voce conseguiu fazer?' });
+      }
+
+      return [...(base[key] || []), ...extras];
+    }
+
+    const trilhaNomes = {
+      emagrecimento: 'Emagrecimento',
+      definicao: 'Definicao',
+      massa: 'Forca e Massa',
+      saude: 'Bem-estar',
+      hormonal: 'Hormonal',
+      retorno: 'Retorno',
+    };
+
+    const trilhaSubs = {
+      emagrecimento: 'Protocolo focado em queima de gordura, deficit calorico sustentavel e consistencia real na rotina.',
+      definicao: 'Para quem ja treina mas quer refinar o corpo, perder gordura localizada e melhorar o shape.',
+      massa: 'Hipertrofia progressiva com suporte nutricional completo e foco em performance.',
+      saude: 'Construir um estilo de vida saudavel com mais energia, sono de qualidade e equilibrio.',
+      hormonal: 'Treino e nutricao alinhados ao ciclo menstrual — trabalhar com o corpo, nao contra ele.',
+      retorno: 'Voltar a treinar com seguranca, respeitando seu corpo no pos-parto ou apos longa pausa.',
+    };
+
+    function buildItems(items, containerId) {
+      const c = document.getElementById(containerId);
+      c.innerHTML = '';
+      items.forEach(item => {
+        const tagHtml = item.tag ? `<div class="tag">${item.tag}</div>` : '';
+        c.innerHTML += `<div class="trail-item">${tagHtml}<strong>${item.strong}</strong><span>${item.span}</span></div>`;
+      });
+    }
+
+    function imcClassShort(imc) {
+      if (imc < 18.5) return 'Abaixo do peso';
+      if (imc < 25) return 'Normal';
+      if (imc < 30) return 'Sobrepeso';
+      return 'Obesidade';
+    }
+
+    const localLabel = { casa: 'Casa', academia: 'Academia', ambos: 'Casa + Academia' };
+
+    function showResult() {
+      document.getElementById('step-9').classList.remove('active');
+      document.getElementById('progress-fill').style.width = '100%';
+      document.getElementById('progress-pct').textContent = '100%';
+      document.getElementById('progress-label').textContent = 'Trilha encontrada';
+
+      const key = calcTrilha();
+      const primeiroNome = nome || 'voce';
+      const trilhaNome = trilhaNomes[key];
+
+      document.getElementById('result-title').innerHTML = primeiroNome + ', sua trilha e <em>' + trilhaNome + '</em>';
+      document.getElementById('result-sub').textContent = trilhaSubs[key];
+
+      const imc = parseFloat(answers['imc'] || 0);
+      document.getElementById('res-imc').textContent = imc > 0 ? imc.toFixed(1) : '—';
+      document.getElementById('res-imc-class').textContent = imc > 0 ? imcClassShort(imc) : '—';
+      document.getElementById('res-dias').textContent = answers['q6'] || '—';
+      document.getElementById('res-local').textContent = localLabel[answers['q4']] || '—';
+
+      buildItems(getModulosTreino(key, answers['q4']), 'trail-treino');
+      buildItems(getMedico(key, answers['q8'], answers['q2'], answers['q7']), 'trail-medico');
+      buildItems(getCheckin(key, answers['q9']), 'trail-checkin');
+
+      document.getElementById('result').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
